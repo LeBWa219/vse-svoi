@@ -1,0 +1,118 @@
+/* stylelint-disable at-rule-no-unknown */
+/* eslint-disable */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  body {
+    @apply font-sans text-slate-800 bg-white antialiased;
+    overflow-x: hidden;
+  }
+  ::selection {
+    @apply bg-brand-lilac text-white;
+  }
+  /* Скроллбар в фирменных цветах */
+  ::-webkit-scrollbar { width: 10px; height: 10px; }
+  ::-webkit-scrollbar-track { background: #f5f3ff; }
+  ::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, #5B21B6, #2563EB);
+    border-radius: 8px;
+  }
+  ::-webkit-scrollbar-thumb:hover { background: linear-gradient(180deg, #DC143C, #5B21B6); }
+}
+
+@layer components {
+  .container-x {
+    @apply mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8;
+  }
+
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 text-sm font-semibold transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2;
+  }
+  .btn-primary {
+    @apply btn text-white shadow-lg shadow-brand-purple/30 hover:shadow-xl hover:shadow-brand-crimson/30 hover:-translate-y-0.5 focus:ring-brand-purple;
+    background-image: linear-gradient(120deg, #5B21B6 0%, #2563EB 60%, #DC143C 110%);
+    background-size: 180% 180%;
+    transition: background-position .5s ease, box-shadow .3s ease, transform .3s ease;
+  }
+  .btn-primary:hover {
+    background-position: 100% 100%;
+  }
+  .btn-ghost {
+    @apply btn bg-white text-brand-purple border-2 border-brand-lilac hover:bg-brand-lilacSoft hover:border-brand-purple focus:ring-brand-lilac;
+  }
+
+  .section-title {
+    @apply font-display text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-brand-deepPurple;
+  }
+  .section-eyebrow {
+    @apply inline-flex items-center gap-2 rounded-full bg-brand-lilacSoft px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-brand-purple;
+  }
+
+  .card {
+    @apply relative rounded-2xl bg-white p-6 shadow-md shadow-brand-purple/5 ring-1 ring-slate-100 transition-all duration-300 hover:shadow-xl hover:shadow-brand-purple/10 hover:-translate-y-1;
+  }
+
+  .input {
+    @apply w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-800 placeholder:text-slate-400 transition-all duration-200 focus:border-brand-purple focus:bg-white focus:outline-none focus:ring-2 focus:ring-brand-lilac/40;
+  }
+  .label {
+    @apply block text-sm font-medium text-slate-700 mb-1.5;
+  }
+
+  .gradient-text {
+    @apply bg-clip-text text-transparent;
+    background-image: linear-gradient(120deg, #5B21B6 0%, #2563EB 50%, #DC143C 100%);
+  }
+
+  /* Декоративный «orb» */
+  .orb {
+    position: absolute;
+    border-radius: 9999px;
+    filter: blur(60px);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* 3D-переворот карточек-вакансий */
+  .flip-card {
+    perspective: 1500px;
+  }
+  .flip-card-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+    transform-style: preserve-3d;
+  }
+  .flip-card.flipped .flip-card-inner {
+    transform: rotateY(180deg);
+  }
+  .flip-card-face {
+    position: absolute;
+    inset: 0;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+  }
+  .flip-card-back {
+    transform: rotateY(180deg);
+  }
+
+  /* Лёгкое покачивание карточки-вакансии при наведении */
+  .flip-card:hover:not(.is-flipped) .flip-card-inner {
+    animation: card-peek 0.9s ease-in-out;
+  }
+  @keyframes card-peek {
+    0%   { transform: rotateY(0deg); }
+    30%  { transform: rotateY(-22deg); }
+    55%  { transform: rotateY(18deg); }
+    75%  { transform: rotateY(-8deg); }
+    100% { transform: rotateY(0deg); }
+  }
+}
