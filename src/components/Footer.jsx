@@ -5,13 +5,13 @@ const socials = [
   {
     key: "vk",
     label: "ВКонтакте",
-    href: "https://vk.com/vsesvoi",
+    href: "https://vk.ru/vse_svoi_job",
     icon: "/images/vk.svg",
   },
   {
     key: "tg",
     label: "Telegram",
-    href: "https://t.me/vsesvoi",
+    href: "https://t.me/vse_svoi_job",
     icon: "/images/telegram.svg",
   },
   {

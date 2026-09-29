@@ -58,7 +58,7 @@ export default function FloatingSocials() {
         {/* На mobile — горизонтальная раскладка, на десктопе — вертикальная */}
         <div className="flex sm:flex-col items-center gap-1.5 sm:gap-2">
           <a
-            href="https://vk.com/vsesvoi"
+            href="https://vk.ru/vse_svoi_job"
             target="_blank"
             rel="noopener noreferrer"
             aria-label="ВКонтакте"
@@ -74,7 +74,7 @@ export default function FloatingSocials() {
           </a>
 
           <a
-            href="https://t.me/vsesvoi"
+            href="https://t.me/vse_svoi_job"
             target="_blank"
             rel="noopener noreferrer"
             aria-label="Telegram"

@@ -47,7 +47,7 @@ export default function CtaBand() {
                 <Icon.arrow className="w-4 h-4" />
               </a>
               <a
-                href="https://t.me/vsesvoi"
+                href="https://t.me/vse_svoi_job"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="btn bg-white/10 text-white ring-1 ring-white/30 hover:bg-white/20 !gap-2"
