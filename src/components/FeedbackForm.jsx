@@ -74,7 +74,7 @@ export default function FeedbackForm({ onOpenLegal }) {
                 <div>
                   <div className="font-semibold text-brand-deepPurple">Безопасно и по закону</div>
                   <div className="text-xs text-slate-600 mt-0.5">
-                    Работаем по договору ГПХ или с самозанятыми. Соответствие 152-ФЗ «О персональных данных».
+                    Работаем с ИП или с самозанятыми. Соответствие 152-ФЗ «О персональных данных».
                   </div>
                 </div>
               </div>
