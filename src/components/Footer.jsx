@@ -57,7 +57,6 @@ export default function Footer({ onOpenLegal }) {
 
       <div className="container-x relative z-10">
         <div className="grid lg:grid-cols-12 gap-10">
-          {/* Бренд + соцсети */}
           <div className="lg:col-span-4">
             <div className="flex items-center gap-3">
               <img
@@ -93,7 +92,6 @@ export default function Footer({ onOpenLegal }) {
               специалистов. Сотрудничаем с Яндексом, Флитом, Бери Заряд.
             </p>
 
-            {/* Соцсети */}
             <div className="mt-6">
               <div className="text-[10px] uppercase tracking-wider text-brand-lilac font-semibold mb-3">
                 Мы в соцсетях
@@ -120,7 +118,6 @@ export default function Footer({ onOpenLegal }) {
             </div>
           </div>
 
-          {/* Ссылки */}
           <div className="lg:col-span-8 grid grid-cols-2 sm:grid-cols-4 gap-6">
             {Object.entries(nav).map(([title, items]) => (
               <div key={title}>
@@ -156,7 +153,6 @@ export default function Footer({ onOpenLegal }) {
           </div>
         </div>
 
-        {/* Нижняя плашка */}
         <div className="mt-12 pt-6 border-t border-white/10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div className="text-xs text-white/60">
             © {new Date().getFullYear()} ООО «Все свои» · ИНН 7700000000 · ОГРН

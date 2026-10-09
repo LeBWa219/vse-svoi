@@ -12,7 +12,6 @@ const navItemsBase = [
   { id: "contacts", label: "Контакты" },
 ];
 
-// Вакансии показываем в навигации только исполнителям
 const navItemsPerformer = [
   ...navItemsBase.slice(0, 4),
   { id: "vacancies", label: "Вакансии" },
@@ -47,7 +46,6 @@ export default function Header() {
     >
       <div className="container-x">
         <div className="flex h-20 md:h-24 items-center justify-between gap-6">
-          {/* Лого */}
           <button
             onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
             className="flex items-center gap-2 sm:gap-3 group flex-shrink-0"
@@ -85,20 +83,23 @@ export default function Header() {
             </div>
           </button>
 
-          {/* Навигация (десктоп) */}
-          <nav className="hidden lg:flex items-center gap-2" style={{ marginLeft: '3rem' }}>
-            {(audience === 'performer' ? navItemsPerformer : navItemsBase).map((it) => (
-              <button
-                key={it.id}
-                onClick={() => go(it.id)}
-                className="px-4 py-2 rounded-full text-sm font-medium text-slate-700 hover:text-brand-purple hover:bg-brand-lilacSoft transition-colors whitespace-nowrap"
-              >
-                {it.label}
-              </button>
-            ))}
+          <nav
+            className="hidden lg:flex items-center gap-2"
+            style={{ marginLeft: "3rem" }}
+          >
+            {(audience === "performer" ? navItemsPerformer : navItemsBase).map(
+              (it) => (
+                <button
+                  key={it.id}
+                  onClick={() => go(it.id)}
+                  className="px-4 py-2 rounded-full text-sm font-medium text-slate-700 hover:text-brand-purple hover:bg-brand-lilacSoft transition-colors whitespace-nowrap"
+                >
+                  {it.label}
+                </button>
+              ),
+            )}
           </nav>
 
-          {/* Переключатель аудитории + CTA */}
           <div className="flex items-center gap-2 sm:gap-3">
             <AudienceToggle audience={audience} setAudience={setAudience} />
 
@@ -110,7 +111,6 @@ export default function Header() {
               Оставить заявку
             </button>
 
-            {/* Бургер */}
             <button
               onClick={() => setMenuOpen((v) => !v)}
               className="lg:hidden p-2 rounded-lg text-brand-purple hover:bg-brand-lilacSoft flex-shrink-0"
@@ -126,22 +126,23 @@ export default function Header() {
         </div>
       </div>
 
-      {/* Мобильное меню */}
       <div
         className={`lg:hidden overflow-hidden transition-all duration-300 ${
           menuOpen ? "max-h-[36rem] border-t border-brand-lilac/30" : "max-h-0"
         } bg-white/98 backdrop-blur`}
       >
         <div className="container-x py-4 grid gap-1">
-          {(audience === 'performer' ? navItemsPerformer : navItemsBase).map((it) => (
-            <button
-              key={it.id}
-              onClick={() => go(it.id)}
-              className="text-left px-4 py-3 rounded-xl text-slate-700 hover:bg-brand-lilacSoft hover:text-brand-purple font-medium transition-colors"
-            >
-              {it.label}
-            </button>
-          ))}
+          {(audience === "performer" ? navItemsPerformer : navItemsBase).map(
+            (it) => (
+              <button
+                key={it.id}
+                onClick={() => go(it.id)}
+                className="text-left px-4 py-3 rounded-xl text-slate-700 hover:bg-brand-lilacSoft hover:text-brand-purple font-medium transition-colors"
+              >
+                {it.label}
+              </button>
+            ),
+          )}
           <button onClick={() => go("contacts")} className="btn-primary mt-2">
             <Icon.chat className="w-4 h-4" />
             Оставить заявку
@@ -155,7 +156,6 @@ export default function Header() {
 function AudienceToggle({ audience, setAudience }) {
   return (
     <div className="relative inline-flex items-center rounded-full bg-brand-lilacSoft p-1 ring-1 ring-brand-lilac/40 flex-shrink-0">
-      {/* Слайдер */}
       <span
         className={`absolute top-1 bottom-1 w-[calc(50%-0.25rem)] rounded-full bg-brand-gradient shadow-md shadow-brand-purple/30 transition-all duration-300 ${
           audience === "client" ? "left-1" : "left-[calc(50%+0rem)]"
