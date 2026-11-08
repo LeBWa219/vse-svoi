@@ -23,9 +23,15 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-white dark:bg-slate-950 relative transition-colors duration-300">
+      <a
+        href="#main-content"
+        className="skip-link focus-visible:translate-y-0"
+      >
+        Перейти к содержимому
+      </a>
       <Header />
 
-      <main>
+      <main id="main-content">
         <Hero />
         <Ticker />
         <Services />
