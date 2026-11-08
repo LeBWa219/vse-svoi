@@ -9,7 +9,7 @@ export default function Hero() {
   return (
     <section
       id="about"
-      className="relative pt-32 md:pt-40 pb-16 md:pb-24 overflow-hidden"
+      className="relative min-h-[100svh] flex items-center pt-32 md:pt-40 pb-16 md:pb-24 overflow-hidden"
     >
       <div className="orb w-[28rem] h-[28rem] -top-32 -left-24 bg-brand-purple/30" />
       <div className="orb w-[24rem] h-[24rem] top-10 right-0 bg-brand-blue/25" />
