@@ -11,7 +11,7 @@ export default function ImagePlaceholder({
   if (src) {
     return (
       <div
-        className={`relative ${height} ${className} overflow-hidden rounded-xl bg-slate-100`}
+        className={`relative ${height} ${className} overflow-hidden rounded-xl bg-slate-100 dark:bg-slate-800`}
       >
         <img
           src={pub(src)}
@@ -40,7 +40,7 @@ export default function ImagePlaceholder({
 
   return (
     <div
-      className={`relative ${height} ${className} flex flex-col items-center justify-center gap-2 rounded-xl bg-gradient-to-br from-brand-lilacSoft to-brand-blue/10 ring-1 ring-dashed ring-brand-lilac/40 text-brand-purple/60`}
+      className={`relative ${height} ${className} flex flex-col items-center justify-center gap-2 rounded-xl bg-gradient-to-br from-brand-lilacSoft to-brand-blue/10 dark:from-brand-purple/20 dark:to-brand-blue/10 ring-1 ring-dashed ring-brand-lilac/40 text-brand-purple/60 dark:text-brand-lilac/60`}
     >
       <Icon.image className="w-8 h-8" />
       <span className="text-[10px] uppercase tracking-wider font-semibold">

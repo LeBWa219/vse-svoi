@@ -22,7 +22,7 @@ export default function News() {
           <div className="max-w-2xl">
             <div className="section-eyebrow">Новости агентства</div>
             <h2 className="mt-4 section-title">Что у нас происходит</h2>
-            <p className="mt-3 text-base sm:text-lg text-slate-600">
+            <p className="mt-3 text-base sm:text-lg text-slate-600 dark:text-slate-400">
               Партнёрства, новые направления, продуктовые апдейты. Обновляем по
               мере событий — без воды.
             </p>
@@ -39,7 +39,7 @@ export default function News() {
                 className={`px-4 py-1.5 text-xs font-semibold rounded-full transition-all ${
                   active === t
                     ? "bg-brand-gradient text-white shadow-md shadow-brand-purple/30"
-                    : "bg-white text-slate-600 ring-1 ring-slate-200 hover:ring-brand-lilac hover:text-brand-purple"
+                    : "bg-white text-slate-600 ring-1 ring-slate-200 hover:ring-brand-lilac hover:text-brand-purple dark:bg-slate-900 dark:text-slate-300 dark:ring-slate-700 dark:hover:text-brand-lilac"
                 }`}
               >
                 {t}
@@ -48,15 +48,15 @@ export default function News() {
           </div>
         </div>
 
-        <div className="mt-10 grid sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
+        <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
           {filtered.map((n, i) => {
             const isOpen = expanded === n.id;
             return (
               <article
                 key={n.id}
-                className={`group relative rounded-2xl bg-white overflow-hidden shadow-md shadow-brand-purple/5 ring-1 ring-slate-100 transition-all duration-500 ${
+                className={`group relative rounded-2xl bg-white dark:bg-slate-900 overflow-hidden shadow-md shadow-brand-purple/5 ring-1 ring-slate-100 dark:ring-slate-800 transition-all duration-500 ${
                   isOpen
-                    ? "sm:col-span-2 lg:col-span-3 shadow-xl shadow-brand-purple/15"
+                    ? "sm:col-span-2 lg:col-span-3 shadow-xl shadow-brand-purple/15 dark:shadow-black/30"
                     : "hover:shadow-xl hover:shadow-brand-purple/10 hover:-translate-y-1"
                 }`}
                 style={{
@@ -70,6 +70,9 @@ export default function News() {
                     <img
                       src={pub(n.image)}
                       alt={n.title}
+                      width="800"
+                      height="300"
+                      loading="lazy"
                       className="w-full h-full object-cover"
                       onError={(e) => {
                         e.currentTarget.style.display = "none";
@@ -92,7 +95,7 @@ export default function News() {
                         "radial-gradient(circle at 20% 30%, white 0%, transparent 40%), radial-gradient(circle at 80% 70%, white 0%, transparent 35%)",
                     }}
                   />
-                  <span className="absolute top-4 left-4 bg-white/95 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider text-brand-purple">
+                  <span className="absolute top-4 left-4 bg-white/95 dark:bg-slate-900/95 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider text-brand-purple dark:text-brand-lilac">
                     {n.tag}
                   </span>
                   <span className="absolute bottom-4 right-4 text-white/90 text-xs font-medium">
@@ -101,16 +104,16 @@ export default function News() {
                 </div>
 
                 <div className="p-5 sm:p-6">
-                  <h3 className="font-display text-lg sm:text-xl font-bold text-brand-deepPurple leading-snug group-hover:text-brand-purple transition-colors">
+                  <h3 className="font-display text-lg sm:text-xl font-bold text-brand-deepPurple dark:text-white leading-snug group-hover:text-brand-purple dark:group-hover:text-brand-lilac transition-colors">
                     {n.title}
                   </h3>
 
-                  <p className="mt-2 text-sm text-slate-600 leading-relaxed line-clamp-3">
+                  <p className="mt-2 text-sm text-slate-600 dark:text-slate-400 leading-relaxed line-clamp-3">
                     {n.excerpt}
                   </p>
 
                   {isOpen && (
-                    <div className="mt-4 pt-4 border-t border-slate-100 text-sm text-slate-700 leading-relaxed space-y-3 animate-fade-in-up">
+                    <div className="mt-4 pt-4 border-t border-slate-100 dark:border-slate-800 text-sm text-slate-700 dark:text-slate-300 leading-relaxed space-y-3 animate-fade-in-up">
                       {n.content.split("\n\n").map((para, idx) => (
                         <p
                           key={idx}
@@ -132,7 +135,7 @@ export default function News() {
 
                   <button
                     onClick={() => toggle(n.id)}
-                    className="mt-4 inline-flex items-center gap-1.5 text-xs font-semibold text-brand-purple hover:text-brand-crimson transition-colors"
+                    className="mt-4 inline-flex items-center gap-1.5 text-xs font-semibold text-brand-purple hover:text-brand-crimson transition-colors dark:text-brand-lilac dark:hover:text-white"
                   >
                     {isOpen ? "Свернуть" : "Читать далее"}
                     <Icon.arrow

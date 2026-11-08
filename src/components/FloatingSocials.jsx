@@ -49,7 +49,7 @@ export default function FloatingSocials() {
         bottom: `calc(${cookieOffset}px + 0.75rem)`,
       }}
     >
-      <div className="relative flex flex-col items-center gap-1.5 sm:gap-2 p-1.5 sm:p-2 rounded-xl sm:rounded-2xl bg-white/95 backdrop-blur shadow-lg sm:shadow-xl ring-1 ring-brand-lilac/30">
+      <div className="relative flex flex-col items-center gap-1.5 sm:gap-2 p-1.5 sm:p-2 rounded-xl sm:rounded-2xl bg-white/95 dark:bg-slate-900/95 backdrop-blur shadow-lg sm:shadow-xl ring-1 ring-brand-lilac/30 dark:ring-slate-700">
         <div
           className="hidden sm:block px-1 py-0.5 text-[9px] font-bold uppercase tracking-wider text-brand-purple rotate-180"
           style={{ writingMode: "vertical-rl" }}
@@ -71,6 +71,9 @@ export default function FloatingSocials() {
             <img
               src={pub("/images/vk.svg")}
               alt="ВКонтакте"
+              width="44"
+              height="44"
+              loading="lazy"
               className="w-full h-full object-cover rounded-lg sm:rounded-xl"
             />
             <Tooltip>ВКонтакте</Tooltip>
@@ -87,6 +90,9 @@ export default function FloatingSocials() {
             <img
               src={pub("/images/telegram.svg")}
               alt="Telegram"
+              width="44"
+              height="44"
+              loading="lazy"
               className="w-full h-full object-cover rounded-lg sm:rounded-xl"
             />
             <Tooltip>Telegram</Tooltip>

@@ -27,69 +27,49 @@ const nav = {
     { label: "О нас", href: "#about" },
     { label: "Новости", href: "#news" },
     { label: "Партнёры", href: "#partners" },
+    { label: "Вопросы и ответы", href: "#faq" },
     { label: "Контакты", href: "#contacts" },
   ],
   Заказчикам: [
     { label: "Услуги", href: "#services" },
     { label: "Как мы работаем", href: "#how" },
     { label: "Оставить заявку", href: "#contacts" },
-    { label: "Договор и документы", href: "#" },
   ],
   Исполнителям: [
     { label: "Стать исполнителем", href: "#contacts" },
-    { label: "Рейтинг", href: "#" },
-    { label: "Обучение", href: "#news" },
-    { label: "Поддержка", href: "#" },
+    { label: "Вакансии", href: "#vacancies" },
+    { label: "Вопросы и ответы", href: "#faq" },
   ],
   Документы: [
     { label: "Политика конфиденциальности", href: "#", action: "privacy" },
     { label: "Политика обработки ПДн", href: "#", action: "policy" },
-    { label: "Пользовательское соглашение", href: "#" },
-    { label: "Согласие на ПДн", href: "#", action: "policy" },
+    { label: "Пользовательское соглашение", href: "#", action: "terms" },
   ],
 };
 
 export default function Footer({ onOpenLegal }) {
   return (
-    <footer className="relative bg-brand-deepPurple text-white pt-16 pb-8 overflow-hidden">
+    <footer className="relative bg-brand-deepPurple dark:bg-slate-950 dark:border-t dark:border-slate-800 text-white pt-16 pb-8 overflow-hidden">
       <div className="orb w-72 h-72 top-0 -left-20 bg-brand-purple/40" />
       <div className="orb w-72 h-72 -bottom-20 right-12 bg-brand-blue/30" />
 
       <div className="container-x relative z-10">
-        <div className="grid lg:grid-cols-12 gap-10">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
           <div className="lg:col-span-4">
-            <div className="flex items-center gap-3">
-              <img
-                src={pub("/logo.jpg")}
-                alt="Все свои"
-                className="h-11 w-11 flex-shrink-0 rounded-xl object-cover shadow-lg shadow-black/30"
-                onError={(e) => {
-                  e.currentTarget.style.display = "none";
-                  const fb = e.currentTarget.nextSibling;
-                  if (fb) fb.style.display = "flex";
-                }}
-              />
-              <div
-                className="h-11 w-11 rounded-xl bg-brand-gradient items-center justify-center shadow-lg shadow-black/30"
-                style={{ display: "none" }}
-              >
-                <span className="font-display font-extrabold text-white text-lg">
-                  ВС
-                </span>
-              </div>
-              <div>
-                <div className="font-display font-extrabold text-lg">
-                  Все свои
-                </div>
-                <div className="text-[10px] uppercase tracking-[0.18em] text-brand-lilac">
-                  аутсорсинговое агентство
-                </div>
-              </div>
+            {/* Текстовый логотип без изображения */}
+            <div className="flex flex-col items-start">
+              <span className="font-display font-extrabold text-2xl tracking-tight text-white">
+                ВСЕ СВОИ
+              </span>
+              <span className="mt-1 text-[10px] uppercase tracking-[0.22em] text-brand-lilac font-semibold">
+                аутсорсинговое агентство
+              </span>
             </div>
 
             <p className="mt-5 text-sm text-white/70 leading-relaxed max-w-sm">
               Подбираем исполнителей для бизнеса и предлагаем проекты для
-              специалистов. Сотрудничаем с Яндексом, Флитом, Бери Заряд.
+              специалистов. Сотрудничаем с сервисами Яндекса, Флитом, Бери
+              Заряд. Работаем по всей России — онлайн и без привязки к региону.
             </p>
 
             <div className="mt-6">
@@ -110,11 +90,29 @@ export default function Footer({ onOpenLegal }) {
                     <img
                       src={pub(s.icon)}
                       alt={s.label}
+                      width="40"
+                      height="40"
+                      loading="lazy"
                       className="w-full h-full object-cover rounded-xl"
                     />
                   </a>
                 ))}
               </div>
+            </div>
+
+            <div className="mt-6 space-y-1.5">
+              <a
+                href="tel:+74951234567"
+                className="block text-sm font-semibold text-white/80 hover:text-white transition-colors"
+              >
+                +7 (495) 123-45-67
+              </a>
+              <a
+                href="mailto:hello@vse-svoi.ru"
+                className="block text-sm text-white/70 hover:text-white transition-colors"
+              >
+                hello@vse-svoi.ru
+              </a>
             </div>
           </div>
 
@@ -164,7 +162,7 @@ export default function Footer({ onOpenLegal }) {
               152-ФЗ «О персональных данных»
             </span>
             <span className="hidden sm:inline">·</span>
-            <span>Сделано в России</span>
+            <span>Работаем по всей России</span>
           </div>
         </div>
       </div>

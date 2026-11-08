@@ -16,7 +16,7 @@ export default function Hero() {
       <div className="orb w-[22rem] h-[22rem] bottom-0 left-1/3 bg-brand-crimson/20" />
 
       <div className="container-x relative z-10">
-        <div className="grid lg:grid-cols-12 gap-10 lg:gap-8 items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-8 items-center">
           <div className="lg:col-span-7">
             <div className="section-eyebrow animate-fade-in-up">
               {c.eyebrow}
@@ -24,7 +24,7 @@ export default function Hero() {
 
             <h1
               key={audience + "-title"}
-              className="mt-5 font-display text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-brand-deepPurple animate-fade-in-up"
+              className="mt-5 font-display text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-brand-deepPurple dark:text-white animate-fade-in-up"
             >
               {c.title.split(" ").slice(0, -2).join(" ")}{" "}
               <span className="gradient-text">
@@ -34,10 +34,27 @@ export default function Hero() {
 
             <p
               key={audience + "-sub"}
-              className="mt-5 text-base sm:text-lg text-slate-600 leading-relaxed max-w-2xl animate-fade-in-up"
+              className="mt-5 text-base sm:text-lg text-slate-600 leading-relaxed max-w-2xl animate-fade-in-up dark:text-slate-400"
             >
               {c.subtitle}
             </p>
+
+            <div className="mt-5 inline-flex items-center gap-2 rounded-full bg-brand-lilacSoft ring-1 ring-brand-lilac/40 px-4 py-1.5 text-xs font-semibold text-brand-purple dark:bg-brand-purple/20 dark:ring-brand-purple/40 dark:text-brand-lilac animate-fade-in-up">
+              <svg
+                viewBox="0 0 24 24"
+                className="w-4 h-4"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.8"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                aria-hidden
+              >
+                <circle cx="12" cy="12" r="9" />
+                <path d="M3.5 9h17M3.5 15h17M12 3a15 15 0 0 1 0 18M12 3a15 15 0 0 0 0 18" />
+              </svg>
+              Не привязаны к региону — работаем по всей России
+            </div>
 
             <div className="mt-7 flex flex-wrap items-center gap-3">
               <a
@@ -73,7 +90,7 @@ export default function Hero() {
                   <div className="font-display text-2xl sm:text-3xl lg:text-4xl font-extrabold gradient-text">
                     {s.value}
                   </div>
-                  <div className="mt-1 text-xs sm:text-sm text-slate-500 leading-tight">
+                  <div className="mt-1 text-xs sm:text-sm text-slate-500 leading-tight dark:text-slate-400">
                     {s.label}
                   </div>
                 </div>
@@ -94,11 +111,11 @@ function HeroVisual({ audience }) {
   return (
     <div className="relative mx-auto max-w-md lg:max-w-none">
       <div className="relative rounded-3xl bg-brand-gradient p-1 shadow-2xl shadow-brand-purple/30">
-        <div className="rounded-[1.4rem] bg-white/95 backdrop-blur p-6 sm:p-8">
+        <div className="rounded-[1.4rem] bg-white/95 backdrop-blur p-6 sm:p-8 dark:bg-slate-900/95">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <span className="h-2.5 w-2.5 rounded-full bg-brand-crimson animate-pulse-slow" />
-              <span className="text-xs font-semibold uppercase tracking-wider text-brand-purple">
+              <span className="text-xs font-semibold uppercase tracking-wider text-brand-purple dark:text-brand-lilac">
                 {audience === "client" ? "Лента заявок" : "Лента заказов"}
               </span>
             </div>
@@ -118,7 +135,7 @@ function HeroVisual({ audience }) {
                   },
                   {
                     t: "Ребалансировщики электросамокатов",
-                    sub: "Москва · 6 чел · послезавтра",
+                    sub: "Казань · 6 чел · послезавтра",
                     tag: "подбор",
                     c: "bg-brand-purple",
                   },
@@ -131,7 +148,7 @@ function HeroVisual({ audience }) {
                 ]
               : [
                   {
-                    t: "Яндекс · Доставка",
+                    t: "Яндекс · Курьеры",
                     sub: "3 заказа · 1 800 ₽",
                     tag: "рядом",
                     c: "bg-brand-blue",
@@ -152,7 +169,7 @@ function HeroVisual({ audience }) {
             ).map((item, i) => (
               <div
                 key={i}
-                className="group flex items-center justify-between gap-3 rounded-2xl border border-slate-100 bg-white p-3.5 shadow-sm hover:shadow-md hover:border-brand-lilac/60 transition-all"
+                className="group flex flex-wrap items-center justify-between gap-x-3 gap-y-2 rounded-2xl border border-slate-100 bg-white p-3.5 shadow-sm hover:shadow-md hover:border-brand-lilac/60 transition-all dark:border-slate-800 dark:bg-slate-800/60"
                 style={{
                   animation: `fade-in-up .5s ease ${0.1 * i + 0.2}s both`,
                 }}
@@ -164,23 +181,25 @@ function HeroVisual({ audience }) {
                     {item.t.charAt(0)}
                   </div>
                   <div>
-                    <div className="font-semibold text-sm text-slate-800">
+                    <div className="font-semibold text-sm text-slate-800 dark:text-slate-100">
                       {item.t}
                     </div>
-                    <div className="text-xs text-slate-500">{item.sub}</div>
+                    <div className="text-xs text-slate-500 dark:text-slate-400">
+                      {item.sub}
+                    </div>
                   </div>
                 </div>
-                <span className="text-[10px] font-bold uppercase tracking-wider text-brand-purple bg-brand-lilacSoft px-2 py-1 rounded-full">
+                <span className="text-[10px] font-bold uppercase tracking-wider text-brand-purple bg-brand-lilacSoft px-2 py-1 rounded-full dark:text-brand-lilac dark:bg-brand-purple/20">
                   {item.tag}
                 </span>
               </div>
             ))}
           </div>
 
-          <div className="mt-5 flex items-center justify-between pt-4 border-t border-slate-100">
-            <div className="flex items-center gap-2 text-xs text-slate-500">
-              <Icon.shield className="w-4 h-4 text-brand-purple" />
-              Договор · ГПХ / самозанятость
+          <div className="mt-5 flex items-center justify-between pt-4 border-t border-slate-100 dark:border-slate-800">
+            <div className="flex items-center gap-2 text-xs text-slate-500 dark:text-slate-400">
+              <Icon.shield className="w-4 h-4 text-brand-purple dark:text-brand-lilac" />
+              Договор · ГПХ / ИП / самозанятость
             </div>
             <div className="text-xs font-semibold text-brand-crimson">
               {audience === "client" ? "12 ч на подбор" : "5 дней до старта"}
@@ -189,14 +208,14 @@ function HeroVisual({ audience }) {
         </div>
       </div>
 
-      <div className="absolute -top-5 -right-3 sm:-right-6 rounded-2xl bg-white shadow-xl ring-1 ring-brand-lilac/40 px-4 py-3 animate-float">
+      <div className="absolute -top-5 -right-3 sm:-right-6 rounded-2xl bg-white shadow-xl ring-1 ring-brand-lilac/40 px-4 py-3 animate-float dark:bg-slate-900 dark:ring-slate-700">
         <div className="flex items-center gap-2">
           <Icon.star className="w-4 h-4 text-brand-crimson" />
           <div>
             <div className="text-[10px] uppercase tracking-wider text-slate-400 font-semibold">
               Рейтинг
             </div>
-            <div className="text-sm font-bold text-brand-deepPurple">
+            <div className="text-sm font-bold text-brand-deepPurple dark:text-white">
               4.9 / 5.0
             </div>
           </div>
@@ -204,7 +223,7 @@ function HeroVisual({ audience }) {
       </div>
 
       <div
-        className="absolute -bottom-5 -left-3 sm:-left-6 rounded-2xl bg-white shadow-xl ring-1 ring-brand-lilac/40 px-4 py-3 animate-float"
+        className="absolute -bottom-5 -left-3 sm:-left-6 rounded-2xl bg-white shadow-xl ring-1 ring-brand-lilac/40 px-4 py-3 animate-float dark:bg-slate-900 dark:ring-slate-700"
         style={{ animationDelay: "1.5s" }}
       >
         <div className="flex items-center gap-2">
@@ -215,7 +234,7 @@ function HeroVisual({ audience }) {
             <div className="text-[10px] uppercase tracking-wider text-slate-400 font-semibold">
               Активных
             </div>
-            <div className="text-sm font-bold text-brand-deepPurple">
+            <div className="text-sm font-bold text-brand-deepPurple dark:text-white">
               350+ человек
             </div>
           </div>

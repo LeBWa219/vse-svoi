@@ -6,6 +6,7 @@ import Ticker from "./components/Ticker.jsx";
 import Services from "./components/Services.jsx";
 import HowWeWork from "./components/HowWeWork.jsx";
 import Vacancies from "./components/Vacancies.jsx";
+import Faq from "./components/Faq.jsx";
 import CtaBand from "./components/CtaBand.jsx";
 import News from "./components/News.jsx";
 import FeedbackForm from "./components/FeedbackForm.jsx";
@@ -21,7 +22,7 @@ export default function App() {
   const closeLegal = () => setLegal({ open: false, kind: null });
 
   return (
-    <div className="min-h-screen bg-white relative">
+    <div className="min-h-screen bg-white dark:bg-slate-950 relative transition-colors duration-300">
       <Header />
 
       <main>
@@ -30,6 +31,7 @@ export default function App() {
         <Services />
         <HowWeWork />
         {audience === "performer" && <Vacancies />}
+        <Faq />
         <CtaBand />
         <News />
         <FeedbackForm onOpenLegal={openLegal} />

@@ -19,12 +19,12 @@ export default function Services() {
             {audience === "client" ? "Для бизнеса" : "Для исполнителей"}
           </div>
           <h2 className="mt-4 section-title">{c.title}</h2>
-          <p className="mt-4 text-base sm:text-lg text-slate-600 leading-relaxed">
+          <p className="mt-4 text-base sm:text-lg text-slate-600 leading-relaxed dark:text-slate-400">
             {c.subtitle}
           </p>
         </div>
 
-        <div className="mt-10 grid sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
+        <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
           {c.items.map((item, i) => {
             const Ico = Icon[item.icon] || Icon.spark;
             return (
@@ -48,13 +48,13 @@ export default function Services() {
                   <div className="absolute inset-0 rounded-2xl bg-brand-gradient opacity-0 group-hover:opacity-[0.04] transition-opacity" />
 
                   <div className="relative">
-                    <div className="h-12 w-12 rounded-xl bg-brand-lilacSoft flex items-center justify-center text-brand-purple group-hover:bg-brand-gradient group-hover:text-white transition-all duration-300">
+                    <div className="h-12 w-12 rounded-xl bg-brand-lilacSoft flex items-center justify-center text-brand-purple group-hover:bg-brand-gradient group-hover:text-white transition-all duration-300 dark:bg-brand-purple/20 dark:text-brand-lilac">
                       <Ico className="w-6 h-6" />
                     </div>
-                    <h3 className="mt-4 font-display text-lg font-bold text-brand-deepPurple">
+                    <h3 className="mt-4 font-display text-lg font-bold text-brand-deepPurple dark:text-white">
                       {item.title}
                     </h3>
-                    <p className="mt-2 text-sm text-slate-600 leading-relaxed">
+                    <p className="mt-2 text-sm text-slate-600 leading-relaxed dark:text-slate-400">
                       {item.text}
                     </p>
 
@@ -67,7 +67,7 @@ export default function Services() {
                             block: "start",
                           })
                       }
-                      className="mt-4 inline-flex items-center gap-1.5 text-xs font-semibold text-brand-purple hover:text-brand-crimson transition-colors"
+                      className="mt-4 inline-flex items-center gap-1.5 text-xs font-semibold text-brand-purple hover:text-brand-crimson transition-colors dark:text-brand-lilac dark:hover:text-white"
                     >
                       {audience === "client" ? "Обсудить детали" : "Подробнее"}
                       <Icon.arrow className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />

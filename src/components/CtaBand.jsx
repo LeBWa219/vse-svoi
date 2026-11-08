@@ -64,6 +64,8 @@ export default function CtaBand() {
                 <img
                   src={pub("/images/telegram.svg")}
                   alt="Telegram"
+                  width="20"
+                  height="20"
                   className="w-5 h-5 rounded-md"
                 />
                 Написать в Telegram

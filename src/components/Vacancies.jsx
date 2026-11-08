@@ -4,10 +4,16 @@ import { Icon } from "./Icons.jsx";
 import ImagePlaceholder from "./ImagePlaceholder.jsx";
 import { pub } from "../utils/pub.js";
 
+const VISIBLE_COUNT = 3;
+
 export default function Vacancies() {
   const [flipped, setFlipped] = useState({});
+  const [showAll, setShowAll] = useState(false);
 
   const toggle = (id) => setFlipped((cur) => ({ ...cur, [id]: !cur[id] }));
+
+  const visible = showAll ? vacancies : vacancies.slice(0, VISIBLE_COUNT);
+  const hiddenCount = vacancies.length - VISIBLE_COUNT;
 
   return (
     <section id="vacancies" className="py-16 sm:py-24 relative overflow-hidden">
@@ -21,31 +27,57 @@ export default function Vacancies() {
             Вакансии
           </div>
           <h2 className="mt-4 section-title">Открытые позиции</h2>
-          <p className="mt-4 text-base sm:text-lg text-slate-600 leading-relaxed">
-            Актуальные вакансии от партнёров «Все свои». Нажмите «Подробнее» —
-            карточка перевернётся, и вы увидите полный список обязанностей,
-            требований и условий.
+          <p className="mt-4 text-base sm:text-lg text-slate-600 leading-relaxed dark:text-slate-400">
+            Актуальные вакансии от партнёров «Все свои» по всей России. Нажмите
+            «Подробнее» — карточка перевернётся, и вы увидите полный список
+            обязанностей, требований и условий.
           </p>
         </div>
 
-        <div className="mt-10 grid sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
-          {vacancies.map((v, i) => (
+        <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
+          {visible.map((v, i) => (
             <VacancyCard
               key={v.id}
               vacancy={v}
               isFlipped={!!flipped[v.id]}
               onToggle={() => toggle(v.id)}
-              animationDelay={i * 0.06}
+              animationDelay={(i % VISIBLE_COUNT) * 0.06}
             />
           ))}
         </div>
 
-        <div className="mt-10 rounded-2xl bg-brand-lilacSoft ring-1 ring-brand-lilac/30 p-5 sm:p-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+        {!showAll && hiddenCount > 0 && (
+          <div className="mt-8 flex justify-center">
+            <button
+              onClick={() => setShowAll(true)}
+              className="btn-ghost"
+            >
+              Смотреть все вакансии
+              <span className="inline-flex items-center justify-center min-w-6 h-6 px-1.5 rounded-full bg-brand-lilacSoft text-brand-purple text-xs font-bold dark:bg-brand-purple/20 dark:text-brand-lilac">
+                +{hiddenCount}
+              </span>
+              <Icon.arrow className="w-4 h-4" />
+            </button>
+          </div>
+        )}
+        {showAll && vacancies.length > VISIBLE_COUNT && (
+          <div className="mt-8 flex justify-center">
+            <button
+              onClick={() => setShowAll(false)}
+              className="btn-ghost"
+            >
+              Свернуть
+              <Icon.arrow className="w-4 h-4 -rotate-90" />
+            </button>
+          </div>
+        )}
+
+        <div className="mt-10 rounded-2xl bg-brand-lilacSoft ring-1 ring-brand-lilac/30 p-5 sm:p-6 flex flex-col sm:flex-row items-center justify-between gap-4 dark:bg-brand-purple/15 dark:ring-brand-purple/30">
           <div className="text-center sm:text-left">
-            <div className="font-display font-bold text-brand-deepPurple text-base sm:text-lg">
+            <div className="font-display font-bold text-brand-deepPurple text-base sm:text-lg dark:text-white">
               Не нашли подходящую вакансию?
             </div>
-            <div className="text-sm text-slate-600 mt-1">
+            <div className="text-sm text-slate-600 mt-1 dark:text-slate-400">
               Оставьте заявку — куратор подберёт для вас индивидуальный вариант.
             </div>
           </div>
@@ -80,7 +112,7 @@ function VacancyCard({ vacancy, isFlipped, onToggle, animationDelay }) {
         className="flip-card-inner"
         style={{ transform: isFlipped ? "rotateY(180deg)" : "rotateY(0deg)" }}
       >
-        <div className="flip-card-face rounded-2xl bg-white ring-1 ring-slate-100 shadow-md shadow-brand-purple/5 hover:shadow-xl hover:shadow-brand-purple/10 transition-shadow overflow-hidden flex flex-col">
+        <div className="flip-card-face rounded-2xl bg-white ring-1 ring-slate-100 shadow-md shadow-brand-purple/5 dark:bg-slate-900 dark:ring-slate-800 hover:shadow-xl hover:shadow-brand-purple/10 transition-shadow overflow-hidden flex flex-col">
           {/* Место под изображение вакансии */}
           <div className="relative">
             <ImagePlaceholder
@@ -115,13 +147,13 @@ function VacancyCard({ vacancy, isFlipped, onToggle, animationDelay }) {
               {vacancy.schedule}
             </div>
 
-            <p className="mt-4 text-sm text-slate-600 leading-relaxed flex-1">
+            <p className="mt-4 text-sm text-slate-600 leading-relaxed flex-1 dark:text-slate-400">
               {vacancy.short}
             </p>
 
             <button
               onClick={onToggle}
-              className="mt-4 inline-flex items-center justify-center gap-1.5 w-full rounded-xl bg-brand-lilacSoft py-2.5 text-xs font-semibold text-brand-purple hover:bg-brand-lilac hover:text-white transition-all"
+              className="mt-4 inline-flex items-center justify-center gap-1.5 w-full rounded-xl bg-brand-lilacSoft py-2.5 text-xs font-semibold text-brand-purple hover:bg-brand-lilac hover:text-white transition-all dark:bg-brand-purple/20 dark:text-brand-lilac dark:hover:bg-brand-purple"
             >
               Подробнее
               <Icon.arrow className="w-3.5 h-3.5" />

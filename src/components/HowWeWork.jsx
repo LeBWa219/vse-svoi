@@ -9,7 +9,7 @@ export default function HowWeWork() {
   return (
     <section
       id="how"
-      className="relative py-16 sm:py-24 bg-brand-gradient-soft overflow-hidden"
+      className="relative py-16 sm:py-24 bg-brand-gradient-soft dark:bg-none dark:bg-slate-950 overflow-hidden"
     >
       <div className="orb w-80 h-80 top-10 -left-20 bg-brand-lilac/40" />
       <div className="orb w-80 h-80 -bottom-20 -right-20 bg-brand-crimson/20" />
@@ -23,11 +23,11 @@ export default function HowWeWork() {
           <h2 className="mt-4 section-title">{c.title}</h2>
         </div>
 
-        <div className="mt-12 grid md:grid-cols-3 lg:grid-cols-5 gap-5">
+        <div className="mt-12 grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-5">
           {c.steps.map((s, i) => (
             <div
               key={audience + "-" + i}
-              className="relative rounded-2xl bg-white p-6 shadow-md shadow-brand-purple/5 ring-1 ring-white/60 hover:shadow-lg hover:shadow-brand-purple/10 hover:-translate-y-1 transition-all"
+              className="relative rounded-2xl bg-white dark:bg-slate-900 p-6 shadow-md shadow-brand-purple/5 ring-1 ring-white/60 dark:ring-slate-800 hover:shadow-lg hover:shadow-brand-purple/10 dark:shadow-black/20 hover:-translate-y-1 transition-all"
               style={{
                 animation: "fade-in-up .5s ease " + i * 0.08 + "s both",
               }}
@@ -37,10 +37,10 @@ export default function HowWeWork() {
               </div>
 
               <div className="mt-4">
-                <h3 className="font-display font-bold text-brand-deepPurple text-base">
+                <h3 className="font-display font-bold text-brand-deepPurple dark:text-white text-base">
                   {s.title}
                 </h3>
-                <p className="mt-2 text-sm text-slate-600 leading-relaxed">
+                <p className="mt-2 text-sm text-slate-600 leading-relaxed dark:text-slate-400">
                   {s.text}
                 </p>
               </div>

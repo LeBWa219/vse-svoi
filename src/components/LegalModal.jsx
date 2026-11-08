@@ -48,7 +48,7 @@ export default function LegalModal({ open, kind, onClose }) {
         className="absolute inset-0 bg-brand-deepPurple/70 backdrop-blur-sm animate-fade-in-up"
       />
 
-      <div className="relative w-full sm:max-w-3xl max-h-[92vh] sm:max-h-[85vh] bg-white rounded-t-3xl sm:rounded-3xl shadow-2xl overflow-hidden flex flex-col animate-fade-in-up">
+      <div className="relative w-full sm:max-w-3xl max-h-[92vh] sm:max-h-[85vh] bg-white dark:bg-slate-900 rounded-t-3xl sm:rounded-3xl shadow-2xl overflow-hidden flex flex-col animate-fade-in-up">
         <div className="relative bg-brand-gradient px-6 py-5 sm:px-8 sm:py-6">
           <div className="flex items-center justify-between gap-4">
             <div>
@@ -73,17 +73,17 @@ export default function LegalModal({ open, kind, onClose }) {
           <div className="absolute inset-x-0 bottom-0 h-1 bg-white/20" />
         </div>
 
-        <div className="overflow-y-auto px-6 py-6 sm:px-8 sm:py-8 text-sm text-slate-700 leading-relaxed space-y-4">
+        <div className="overflow-y-auto px-6 py-6 sm:px-8 sm:py-8 text-sm text-slate-700 dark:text-slate-300 leading-relaxed space-y-4">
           <Content />
 
-          <div className="mt-8 pt-5 border-t border-slate-200 text-xs text-slate-500">
+          <div className="mt-8 pt-5 border-t border-slate-200 dark:border-slate-700 text-xs text-slate-500">
             Документ вступает в силу с 1 января 2026 года. Последнее обновление
-            — 15 сентября 2026 года. Уточнить
-            {/* ООО «Все свои» · ИНН 7700000000 · г. Москва, ул. Тверская, 18. */}
+            — 26 октября 2026 года. ООО «Все свои» · ИНН 7700000000 ·
+            hello@vse-svoi.ru · +7 (495) 123-45-67.
           </div>
         </div>
 
-        <div className="px-6 py-4 sm:px-8 bg-slate-50 border-t border-slate-100 flex justify-end">
+        <div className="px-6 py-4 sm:px-8 bg-slate-50 dark:bg-slate-800/60 border-t border-slate-100 dark:border-slate-700 flex justify-end">
           <button
             onClick={onClose}
             className="btn-primary !py-2.5 !px-5 text-sm"

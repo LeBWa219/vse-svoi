@@ -1,33 +1,84 @@
-export const partners = [
+export const partnerGroups = [
   {
-    name: "Яндекс",
-    note: "курьерская доставка и сервисы",
-    logo: "/images/partners/yandex.png",
+    id: "couriers",
+    title: "Курьеры",
+    note: "Пешие, вело- и автокурьеры",
+    items: [
+      {
+        name: "Яндекс Курьеры",
+        note: "заказы от сервисов Яндекса для курьеров",
+        logo: "/images/partners/yandex.png",
+      },
+      {
+        name: "Яндекс Еда",
+        note: "доставка заказов из ресторанов",
+        logo: "",
+      },
+      {
+        name: "Яндекс Лавка",
+        note: "экспресс-доставка продуктов",
+        logo: "",
+      },
+      {
+        name: "Яндекс Маркет",
+        note: "доставка заказов маркетплейса",
+        logo: "",
+      },
+    ],
   },
   {
-    name: "Флит",
-    note: "логистика и аренда транспорта",
-    logo: "/images/partners/fleet.png",
+    id: "delivery",
+    title: "Доставка",
+    note: "Логистика и перевозки",
+    items: [
+      {
+        name: "Яндекс Доставка",
+        note: "быстрая доставка грузов и документов",
+        logo: "/images/partners/yandex.png",
+      },
+      {
+        name: "Флит",
+        note: "логистика и аренда транспорта",
+        logo: "/images/partners/fleet.png",
+      },
+      {
+        name: "Яндекс Маркет",
+        note: "логистика отправлений маркетплейса",
+        logo: "",
+      },
+      {
+        name: "Яндекс Путешествия",
+        note: "проекты в сфере перевозок",
+        logo: "",
+      },
+    ],
   },
   {
-    name: "Бери Заряд",
-    note: "сеть станций зарядки электротранспорта",
-    logo: "/images/partners/beri-zaryad.jpg",
-  },
-  {
-    name: "Яндекс",
-    note: "курьерская доставка и сервисы",
-    logo: "/images/partners/yandex.png",
-  },
-  {
-    name: "Флит",
-    note: "логистика и аренда транспорта",
-    logo: "/images/partners/fleet.png",
-  },
-  {
-    name: "Бери Заряд",
-    note: "сеть станций зарядки электротранспорта",
-    logo: "/images/partners/beri-zaryad.jpg",
+    id: "zaryad",
+    title: "Бери Заряд",
+    note: "Зарядка и обслуживание электротранспорта",
+    items: [
+      {
+        name: "Бери Заряд",
+        note: "сеть станций зарядки электротранспорта",
+        logo: "/images/partners/beri-zaryad.jpg",
+      },
+      {
+        name: "Яндекс Заряды",
+        note: "зарядные станции в городе",
+        logo: "",
+      },
+      {
+        name: "Яндекс Го",
+        note: "сервис поездок и такси",
+        logo: "",
+      },
+      {
+        name: "Скоро новые",
+        note: "переговоры идут — список расширяется",
+        logo: "",
+      },
+    ],
   },
 ];
 

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useAudience } from "../context/AudienceContext.jsx";
 import { Icon } from "./Icons.jsx";
+import { pub } from "../utils/pub.js";
 
 const initial = { name: "", phone: "", email: "", message: "" };
 
@@ -48,18 +49,35 @@ export default function FeedbackForm({ onOpenLegal }) {
       <div className="orb w-80 h-80 bottom-0 -left-20 bg-brand-blue/25" />
 
       <div className="container-x relative z-10">
-        <div className="grid lg:grid-cols-12 gap-8 lg:gap-12 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
           <div className="lg:col-span-5">
             <div className="section-eyebrow">
               <Icon.chat className="w-3.5 h-3.5" />
               Контакты и заявка
             </div>
-            <h2 className="mt-4 section-title">Обсудим вашу задачу</h2>
-            <p className="mt-3 text-base text-slate-600 leading-relaxed">
+            <h2 className="mt-4 section-title">Свяжитесь с нами</h2>
+            <p className="mt-3 text-base text-slate-600 leading-relaxed dark:text-slate-400">
               {audience === "client"
                 ? "Опишите задачу — куратор ответит в течение 30 минут в рабочее время. Без брифов на 20 страниц и навязчивых звонков."
                 : "Заполните анкету — куратор свяжется, подберёт подходящие направления и расскажет про ближайшие заказы."}
             </p>
+
+            <div className="mt-6 inline-flex items-center gap-2 rounded-full bg-brand-lilacSoft ring-1 ring-brand-lilac/40 px-4 py-1.5 text-xs font-semibold text-brand-purple dark:bg-brand-purple/20 dark:ring-brand-purple/40 dark:text-brand-lilac">
+              <svg
+                viewBox="0 0 24 24"
+                className="w-4 h-4"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.8"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                aria-hidden
+              >
+                <circle cx="12" cy="12" r="9" />
+                <path d="M3.5 9h17M3.5 15h17M12 3a15 15 0 0 1 0 18M12 3a15 15 0 0 0 0 18" />
+              </svg>
+              Работаем по всей России — онлайн и без привязки к офису
+            </div>
 
             <div className="mt-8 space-y-4">
               <ContactRow
@@ -75,22 +93,46 @@ export default function FeedbackForm({ onOpenLegal }) {
                 href="mailto:hello@vse-svoi.ru"
               />
               <ContactRow
+                icon="tg"
+                label="Telegram — ответим быстрее всего"
+                value="@vse_svoi_job"
+                href="https://t.me/vse_svoi_job"
+                external
+                img={pub("/images/telegram.svg")}
+              />
+              <ContactRow
+                icon="vk"
+                label="ВКонтакте"
+                value="vk.ru/vse_svoi_job"
+                href="https://vk.ru/vse_svoi_job"
+                external
+                img={pub("/images/vk.svg")}
+              />
+              <ContactRow
+                icon="max"
+                label="MAX"
+                value="max.ru/vsesvoi"
+                href="https://max.ru/vsesvoi"
+                external
+                img={pub("/images/max.svg")}
+              />
+              <ContactRow
                 icon="clock"
                 label="Часы работы"
-                value="Уточнить (не готово)"
+                value="Ежедневно 9:00–21:00 (МСК)"
               />
             </div>
 
-            <div className="mt-8 rounded-2xl bg-brand-lilacSoft p-5 ring-1 ring-brand-lilac/30">
+            <div className="mt-8 rounded-2xl bg-brand-lilacSoft p-5 ring-1 ring-brand-lilac/30 dark:bg-brand-purple/15 dark:ring-brand-purple/30">
               <div className="flex items-center gap-3">
                 <div className="h-10 w-10 rounded-full bg-brand-gradient flex items-center justify-center text-white">
                   <Icon.shield className="w-5 h-5" />
                 </div>
                 <div>
-                  <div className="font-semibold text-brand-deepPurple">
+                  <div className="font-semibold text-brand-deepPurple dark:text-white">
                     Безопасно и по закону
                   </div>
-                  <div className="text-xs text-slate-600 mt-0.5">
+                  <div className="text-xs text-slate-600 mt-0.5 dark:text-slate-400">
                     Работаем с ИП или с самозанятыми. Соответствие 152-ФЗ «О
                     персональных данных».
                   </div>
@@ -100,7 +142,7 @@ export default function FeedbackForm({ onOpenLegal }) {
           </div>
 
           <div className="lg:col-span-7">
-            <div className="relative rounded-3xl bg-white p-6 sm:p-8 lg:p-10 shadow-xl shadow-brand-purple/10 ring-1 ring-slate-100">
+            <div className="relative rounded-3xl bg-white p-6 sm:p-8 lg:p-10 shadow-xl shadow-brand-purple/10 ring-1 ring-slate-100 dark:bg-slate-900 dark:ring-slate-800 dark:shadow-black/30">
               {submitted ? (
                 <SuccessBlock onReset={() => setSubmitted(false)} />
               ) : (
@@ -139,6 +181,15 @@ export default function FeedbackForm({ onOpenLegal }) {
                     />
                   </Field>
 
+                  <Field label="Город / регион">
+                    <input
+                      type="text"
+                      className="input"
+                      placeholder="Москва, Казань, любой город России…"
+                      autoComplete="address-level2"
+                    />
+                  </Field>
+
                   <Field
                     label={
                       audience === "client"
@@ -153,7 +204,7 @@ export default function FeedbackForm({ onOpenLegal }) {
                       placeholder={
                         audience === "client"
                           ? "Например: нужны 5 курьеров на доставку в Москве, со следующей недели, на месяц"
-                          : "Например: опыт работы курьером 2 года, готов брать заказы в районе СВАО"
+                          : "Например: опыт работы курьером 2 года, готов брать заказы в своём районе"
                       }
                       value={form.message}
                       onChange={update("message")}
@@ -171,12 +222,12 @@ export default function FeedbackForm({ onOpenLegal }) {
                       }}
                       className="mt-0.5 h-5 w-5 rounded border-slate-300 text-brand-purple focus:ring-brand-lilac cursor-pointer"
                     />
-                    <span className="text-xs text-slate-600 leading-relaxed">
+                    <span className="text-xs text-slate-600 leading-relaxed dark:text-slate-400">
                       Я согласен(на) с{" "}
                       <button
                         type="button"
                         onClick={() => onOpenLegal("policy")}
-                        className="text-brand-purple font-semibold underline hover:text-brand-crimson"
+                        className="text-brand-purple font-semibold underline hover:text-brand-crimson dark:text-brand-lilac"
                       >
                         Политикой обработки персональных данных
                       </button>{" "}
@@ -184,7 +235,7 @@ export default function FeedbackForm({ onOpenLegal }) {
                       <button
                         type="button"
                         onClick={() => onOpenLegal("privacy")}
-                        className="text-brand-purple font-semibold underline hover:text-brand-crimson"
+                        className="text-brand-purple font-semibold underline hover:text-brand-crimson dark:text-brand-lilac"
                       >
                         Политикой конфиденциальности
                       </button>
@@ -232,7 +283,14 @@ function Field({ label, error, children }) {
   );
 }
 
-function ContactRow({ icon, label, value, href }) {
+function ContactRow({
+  icon,
+  label,
+  value,
+  href,
+  external,
+  img,
+}) {
   const Ico =
     icon === "phone" ? (
       <svg
@@ -272,26 +330,37 @@ function ContactRow({ icon, label, value, href }) {
         <path d="M12 22s-7-5.5-7-11a7 7 0 0 1 14 0c0 5.5-7 11-7 11z" />
         <circle cx="12" cy="11" r="2.5" />
       </svg>
+    ) : img ? (
+      <img src={img} alt="" width="20" height="20" className="w-5 h-5 rounded-md object-contain" />
     ) : (
       <Icon.clock className="w-5 h-5" />
     );
 
   const content = (
     <div className="flex items-center gap-3">
-      <div className="h-10 w-10 rounded-xl bg-brand-lilacSoft flex items-center justify-center text-brand-purple">
+      <div className="h-10 w-10 rounded-xl bg-brand-lilacSoft flex items-center justify-center text-brand-purple dark:bg-brand-purple/20 dark:text-brand-lilac">
         {Ico}
       </div>
       <div>
         <div className="text-xs uppercase tracking-wider text-slate-400 font-semibold">
           {label}
+          {external && " ↗"}
         </div>
-        <div className="text-sm font-semibold text-slate-800">{value}</div>
+        <div className="text-sm font-semibold text-slate-800 dark:text-slate-100">
+          {value}
+        </div>
       </div>
     </div>
   );
 
   return href ? (
-    <a href={href} className="block hover:opacity-80 transition-opacity">
+    <a
+      href={href}
+      className="block hover:opacity-80 transition-opacity"
+      {...(external
+        ? { target: "_blank", rel: "noopener noreferrer" }
+        : {})}
+    >
       {content}
     </a>
   ) : (
@@ -305,10 +374,10 @@ function SuccessBlock({ onReset }) {
       <div className="mx-auto h-16 w-16 rounded-full bg-brand-gradient flex items-center justify-center text-white shadow-lg shadow-brand-purple/30">
         <Icon.check className="w-8 h-8" />
       </div>
-      <h3 className="mt-5 font-display text-2xl font-bold text-brand-deepPurple">
+      <h3 className="mt-5 font-display text-2xl font-bold text-brand-deepPurple dark:text-white">
         Заявка отправлена!
       </h3>
-      <p className="mt-2 text-sm text-slate-600 max-w-md mx-auto">
+      <p className="mt-2 text-sm text-slate-600 dark:text-slate-400 max-w-md mx-auto">
         Спасибо! Куратор «Все свои» свяжется с вами в течение 30 минут в рабочее
         время. Если оставили заявку в нерабочее время — ответим на следующее
         утро.
