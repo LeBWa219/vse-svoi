@@ -208,7 +208,7 @@ function HeroVisual({ audience }) {
         </div>
       </div>
 
-      <div className="absolute -top-5 -right-3 sm:-right-6 rounded-2xl bg-white shadow-xl ring-1 ring-brand-lilac/40 px-4 py-3 animate-float dark:bg-slate-900 dark:ring-slate-700">
+      <div className="hidden sm:block absolute -top-5 -right-3 sm:-right-6 rounded-2xl bg-white shadow-xl ring-1 ring-brand-lilac/40 px-4 py-3 animate-float dark:bg-slate-900 dark:ring-slate-700">
         <div className="flex items-center gap-2">
           <Icon.star className="w-4 h-4 text-brand-crimson" />
           <div>
@@ -223,7 +223,7 @@ function HeroVisual({ audience }) {
       </div>
 
       <div
-        className="absolute -bottom-5 -left-3 sm:-left-6 rounded-2xl bg-white shadow-xl ring-1 ring-brand-lilac/40 px-4 py-3 animate-float dark:bg-slate-900 dark:ring-slate-700"
+        className="hidden sm:block absolute -bottom-5 -left-3 sm:-left-6 rounded-2xl bg-white shadow-xl ring-1 ring-brand-lilac/40 px-4 py-3 animate-float dark:bg-slate-900 dark:ring-slate-700"
         style={{ animationDelay: "1.5s" }}
       >
         <div className="flex items-center gap-2">
