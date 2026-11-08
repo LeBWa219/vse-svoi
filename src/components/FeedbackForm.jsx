@@ -148,9 +148,10 @@ export default function FeedbackForm({ onOpenLegal }) {
               ) : (
                 <form onSubmit={onSubmit} noValidate className="space-y-5">
                   <div className="grid sm:grid-cols-2 gap-4">
-                    <Field label="Имя *" error={errors.name}>
+                    <Field label="Имя *" error={errors.name} htmlFor="ff-name">
                       <input
                         type="text"
+                        id="ff-name"
                         className="input"
                         placeholder="Иван"
                         value={form.name}
@@ -158,9 +159,10 @@ export default function FeedbackForm({ onOpenLegal }) {
                         autoComplete="name"
                       />
                     </Field>
-                    <Field label="Телефон *" error={errors.phone}>
+                    <Field label="Телефон *" error={errors.phone} htmlFor="ff-phone">
                       <input
                         type="tel"
+                        id="ff-phone"
                         className="input"
                         placeholder="+7 (___) ___-__-__"
                         value={form.phone}
@@ -170,9 +172,10 @@ export default function FeedbackForm({ onOpenLegal }) {
                     </Field>
                   </div>
 
-                  <Field label="Email (необязательно)" error={errors.email}>
+                  <Field label="Email (необязательно)" error={errors.email} htmlFor="ff-email">
                     <input
                       type="email"
+                      id="ff-email"
                       className="input"
                       placeholder="ivan@company.ru"
                       value={form.email}
@@ -181,9 +184,10 @@ export default function FeedbackForm({ onOpenLegal }) {
                     />
                   </Field>
 
-                  <Field label="Город / регион">
+                  <Field label="Город / регион" htmlFor="ff-city">
                     <input
                       type="text"
+                      id="ff-city"
                       className="input"
                       placeholder="Москва, Казань, любой город России…"
                       autoComplete="address-level2"
@@ -197,8 +201,10 @@ export default function FeedbackForm({ onOpenLegal }) {
                         : "О себе и опыте *"
                     }
                     error={errors.message}
+                    htmlFor="ff-message"
                   >
                     <textarea
+                      id="ff-message"
                       rows={4}
                       className="input resize-none"
                       placeholder={
@@ -273,10 +279,12 @@ export default function FeedbackForm({ onOpenLegal }) {
   );
 }
 
-function Field({ label, error, children }) {
+function Field({ label, error, htmlFor, children }) {
   return (
     <div>
-      <label className="label">{label}</label>
+      <label className="label" htmlFor={htmlFor}>
+        {label}
+      </label>
       {children}
       {error && <p className="mt-1 text-xs text-brand-crimson">{error}</p>}
     </div>
