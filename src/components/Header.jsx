@@ -206,7 +206,7 @@ function AudienceToggle({ audience, setAudience }) {
       />
       <button
         onClick={() => setAudience("client")}
-        className={`relative z-10 px-1.5 min-[400px]:px-2.5 sm:px-3.5 py-1 text-[10px] min-[400px]:text-[11px] sm:text-[13px] xl:text-sm font-semibold rounded-full transition-colors whitespace-nowrap ${
+        className={`relative z-10 px-1.5 min-[400px]:px-2.5 sm:px-3.5 py-1 text-[10px] min-[400px]:text-[11px] sm:text-[13px] xl:text-sm font-semibold rounded-full transition-colors whitespace-nowrap after:absolute after:-inset-y-2.5 after:-inset-x-1 after:content-[''] ${
           audience === "client"
             ? "text-white"
             : "text-brand-purple hover:text-brand-deepPurple dark:text-brand-lilac dark:hover:text-white"
@@ -216,7 +216,7 @@ function AudienceToggle({ audience, setAudience }) {
       </button>
       <button
         onClick={() => setAudience("performer")}
-        className={`relative z-10 px-1.5 min-[400px]:px-2.5 sm:px-3.5 py-1 text-[10px] min-[400px]:text-[11px] sm:text-[13px] xl:text-sm font-semibold rounded-full transition-colors whitespace-nowrap ${
+        className={`relative z-10 px-1.5 min-[400px]:px-2.5 sm:px-3.5 py-1 text-[10px] min-[400px]:text-[11px] sm:text-[13px] xl:text-sm font-semibold rounded-full transition-colors whitespace-nowrap after:absolute after:-inset-y-2.5 after:-inset-x-1 after:content-[''] ${
           audience === "performer"
             ? "text-white"
             : "text-brand-purple hover:text-brand-deepPurple dark:text-brand-lilac dark:hover:text-white"
