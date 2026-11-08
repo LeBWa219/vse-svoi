@@ -49,7 +49,7 @@ const nav = {
 
 export default function Footer({ onOpenLegal }) {
   return (
-    <footer className="relative bg-brand-deepPurple dark:bg-slate-950 dark:border-t dark:border-slate-800 text-white pt-16 pb-8 overflow-hidden">
+    <footer className="relative bg-brand-deepPurple dark:bg-slate-950 dark:border-t dark:border-slate-800 text-white pt-16 pb-28 sm:pb-8 overflow-hidden">
       <div className="orb w-72 h-72 top-0 -left-20 bg-brand-purple/40" />
       <div className="orb w-72 h-72 -bottom-20 right-12 bg-brand-blue/30" />
 

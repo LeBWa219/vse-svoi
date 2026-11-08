@@ -19,6 +19,14 @@ export default function CookieBanner({ onOpenLegal }) {
     }
   }, [])
 
+  // Пока баннер открыт, добавляем отступ снизу, чтобы он не перекрывал контент при прокрутке до конца
+  useEffect(() => {
+    document.body.style.paddingBottom = visible ? '140px' : ''
+    return () => {
+      document.body.style.paddingBottom = ''
+    }
+  }, [visible])
+
   const accept = (level) => {
     try {
       localStorage.setItem(
