@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://LeBWa219.github.io/vse-svoi/sitemap.xml
