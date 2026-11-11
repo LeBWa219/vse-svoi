@@ -58,7 +58,7 @@ export default function Footer({ onOpenLegal }) {
           <div className="lg:col-span-4">
             {/* Текстовый логотип без изображения */}
             <div className="flex flex-col items-start">
-              <span className="font-display font-extrabold text-2xl tracking-tight text-white">
+              <span className="font-brand font-bold text-xl tracking-tight text-white">
                 ВСЕ СВОИ
               </span>
               <span className="mt-1 text-[10px] uppercase tracking-[0.22em] text-brand-lilac font-semibold">

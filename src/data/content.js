@@ -7,7 +7,7 @@ export const heroContent = {
     primaryCta: "Оставить заявку",
     secondaryCta: "Как мы работаем",
     stats: [
-      { value: "350+", label: "активных исполнителей" },
+      { value: "+10 000", label: "активных исполнителей" },
       { value: "12", label: "часов — средний срок подбора" },
       { value: "98%", label: "клиентов возвращаются повторно" },
     ],

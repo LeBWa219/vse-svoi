@@ -22,6 +22,7 @@ export default {
       fontFamily: {
         sans: ['"Inter"', '"Manrope"', "system-ui", "sans-serif"],
         display: ['"Manrope"', '"Inter"', "system-ui", "sans-serif"],
+        brand: ['"Unbounded"', '"Manrope"', "system-ui", "sans-serif"],
       },
       backgroundImage: {
         "brand-gradient":

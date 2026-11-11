@@ -72,7 +72,7 @@ export default function Header() {
             className="flex flex-col items-start leading-none flex-shrink-0"
             aria-label="Все свои — на главную"
           >
-            <span className="font-display font-extrabold tracking-tight text-base min-[400px]:text-lg sm:text-2xl xl:text-3xl gradient-text whitespace-nowrap">
+            <span className="font-brand font-bold tracking-tight text-lg min-[400px]:text-xl sm:text-2xl xl:text-[1.7rem] brand-text whitespace-nowrap">
               ВСЕ СВОИ
             </span>
             <span className="mt-1 hidden min-[400px]:block text-[9px] uppercase tracking-[0.16em] text-brand-purple/80 dark:text-brand-lilac font-semibold whitespace-nowrap">

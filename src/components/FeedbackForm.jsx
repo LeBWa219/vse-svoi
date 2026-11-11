@@ -209,7 +209,7 @@ export default function FeedbackForm({ onOpenLegal }) {
                       className="input resize-none"
                       placeholder={
                         audience === "client"
-                          ? "Например: нужны 5 курьеров на доставку в Москве, со следующей недели, на месяц"
+                          ? "Опишите задачу — подберём исполнителей в кратчайшие сроки"
                           : "Например: опыт работы курьером 2 года, готов брать заказы в своём районе"
                       }
                       value={form.message}

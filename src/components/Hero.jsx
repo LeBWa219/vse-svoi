@@ -235,7 +235,7 @@ function HeroVisual({ audience }) {
               Активных
             </div>
             <div className="text-sm font-bold text-brand-deepPurple dark:text-white">
-              350+ человек
+              +10 000 человек
             </div>
           </div>
         </div>
