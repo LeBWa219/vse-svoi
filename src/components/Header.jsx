@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useAudience } from "../context/AudienceContext.jsx";
 import { useTheme } from "../context/ThemeContext.jsx";
 import { Icon } from "./Icons.jsx";
@@ -196,15 +196,34 @@ export default function Header() {
 }
 
 function AudienceToggle({ audience, setAudience }) {
+  // Капсула точно обхватывает активную кнопку: ширины кнопок разные,
+  // поэтому позицию и ширину капсулы измеряем по факту, а не берём 50%.
+  const clientRef = useRef(null);
+  const performerRef = useRef(null);
+  const [pill, setPill] = useState({ left: 4, width: 0 });
+
+  const updatePill = useCallback(() => {
+    const el = audience === "client" ? clientRef.current : performerRef.current;
+    if (el) setPill({ left: el.offsetLeft, width: el.offsetWidth });
+  }, [audience]);
+
+  useEffect(() => {
+    updatePill();
+    window.addEventListener("resize", updatePill);
+    // после загрузки шрифтов ширины кнопок меняются — пересчитать
+    document.fonts?.ready?.then(updatePill).catch(() => {});
+    return () => window.removeEventListener("resize", updatePill);
+  }, [updatePill]);
+
   return (
     <div className="relative inline-flex items-center rounded-full bg-brand-lilacSoft p-1 ring-1 ring-brand-lilac/40 flex-shrink-0 dark:bg-brand-purple/20 dark:ring-brand-purple/40">
       <span
-        className={`absolute top-1 bottom-1 w-[calc(50%-0.25rem)] rounded-full bg-brand-gradient shadow-md shadow-brand-purple/30 transition-all duration-300 ${
-          audience === "client" ? "left-1" : "left-[calc(50%+0rem)]"
-        }`}
+        className="absolute top-1 bottom-1 rounded-full bg-brand-gradient shadow-md shadow-brand-purple/30 transition-all duration-300"
+        style={{ left: pill.left, width: pill.width }}
         aria-hidden
       />
       <button
+        ref={clientRef}
         onClick={() => setAudience("client")}
         className={`relative z-10 px-1.5 min-[400px]:px-2.5 sm:px-3.5 py-1 text-[10px] min-[400px]:text-[11px] sm:text-[13px] xl:text-sm font-semibold rounded-full transition-colors whitespace-nowrap after:absolute after:-inset-y-3 after:-inset-x-1 after:content-[''] ${
           audience === "client"
@@ -215,6 +234,7 @@ function AudienceToggle({ audience, setAudience }) {
         Заказчикам
       </button>
       <button
+        ref={performerRef}
         onClick={() => setAudience("performer")}
         className={`relative z-10 px-1.5 min-[400px]:px-2.5 sm:px-3.5 py-1 text-[10px] min-[400px]:text-[11px] sm:text-[13px] xl:text-sm font-semibold rounded-full transition-colors whitespace-nowrap after:absolute after:-inset-y-3 after:-inset-x-1 after:content-[''] ${
           audience === "performer"
