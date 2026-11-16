@@ -6,14 +6,30 @@ import { pub } from "../utils/pub.js";
 
 const VISIBLE_COUNT = 3;
 
+const CITY_FILTERS = [
+  { id: "all", label: "Все города" },
+  { id: "msk", label: "Москва и МО" },
+  { id: "spb", label: "Санкт-Петербург" },
+];
+
 export default function Vacancies() {
   const [flipped, setFlipped] = useState({});
   const [showAll, setShowAll] = useState(false);
+  const [city, setCity] = useState("all");
 
   const toggle = (id) => setFlipped((cur) => ({ ...cur, [id]: !cur[id] }));
 
-  const visible = showAll ? vacancies : vacancies.slice(0, VISIBLE_COUNT);
-  const hiddenCount = vacancies.length - VISIBLE_COUNT;
+  const filtered =
+    city === "all"
+      ? vacancies
+      : vacancies.filter((v) => v.cities?.includes(city));
+  const visible = showAll ? filtered : filtered.slice(0, VISIBLE_COUNT);
+  const hiddenCount = filtered.length - VISIBLE_COUNT;
+
+  const pickCity = (id) => {
+    setCity(id);
+    setShowAll(false);
+  };
 
   return (
     <section id="vacancies" className="py-16 sm:py-24 relative overflow-hidden">
@@ -21,17 +37,36 @@ export default function Vacancies() {
       <div className="orb w-72 h-72 -bottom-20 -left-20 bg-brand-crimson/15" />
 
       <div className="container-x relative z-10">
-        <div className="max-w-3xl">
-          <div className="section-eyebrow">
-            <Icon.briefcase className="w-3.5 h-3.5" />
-            Вакансии
+        <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-6">
+          <div className="max-w-3xl">
+            <div className="section-eyebrow">
+              <Icon.briefcase className="w-3.5 h-3.5" />
+              Вакансии
+            </div>
+            <h2 className="mt-4 section-title">Открытые позиции</h2>
+            <p className="mt-4 text-base sm:text-lg text-slate-600 leading-relaxed dark:text-slate-400">
+              Актуальные вакансии от партнёров «Все свои» по всей России. Нажмите
+              «Подробнее» — карточка перевернётся, и вы увидите полный список
+              обязанностей, требований и условий.
+            </p>
           </div>
-          <h2 className="mt-4 section-title">Открытые позиции</h2>
-          <p className="mt-4 text-base sm:text-lg text-slate-600 leading-relaxed dark:text-slate-400">
-            Актуальные вакансии от партнёров «Все свои» по всей России. Нажмите
-            «Подробнее» — карточка перевернётся, и вы увидите полный список
-            обязанностей, требований и условий.
-          </p>
+
+          {/* Фильтр по городам */}
+          <div className="flex flex-wrap gap-2 lg:flex-shrink-0 lg:pt-2">
+            {CITY_FILTERS.map((f) => (
+              <button
+                key={f.id}
+                onClick={() => pickCity(f.id)}
+                className={`px-4 py-2 text-xs font-semibold rounded-full transition-all ${
+                  city === f.id
+                    ? "bg-brand-gradient text-white shadow-md shadow-brand-purple/30"
+                    : "bg-white text-slate-600 ring-1 ring-slate-200 hover:ring-brand-lilac hover:text-brand-purple dark:bg-slate-900 dark:text-slate-300 dark:ring-slate-700 dark:hover:text-brand-lilac"
+                }`}
+              >
+                {f.label}
+              </button>
+            ))}
+          </div>
         </div>
 
         <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
@@ -45,6 +80,13 @@ export default function Vacancies() {
             />
           ))}
         </div>
+
+        {visible.length === 0 && (
+          <div className="mt-10 text-center text-slate-500 py-12 dark:text-slate-400">
+            В этом регионе сейчас нет открытых вакансий — напишите нам, и мы
+            подберём вариант.
+          </div>
+        )}
 
         {!showAll && hiddenCount > 0 && (
           <div className="mt-8 flex justify-center">
@@ -60,7 +102,7 @@ export default function Vacancies() {
             </button>
           </div>
         )}
-        {showAll && vacancies.length > VISIBLE_COUNT && (
+        {showAll && filtered.length > VISIBLE_COUNT && (
           <div className="mt-8 flex justify-center">
             <button
               onClick={() => setShowAll(false)}
