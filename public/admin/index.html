@@ -374,7 +374,7 @@ function addFaq() {
 
 // ---------- Публикация ----------
 function updatePublish() {
-  const dirty = CONFIG.FILES && Object.keys(CONFIG.FILES).some((k) => JSON.stringify(data[k], null, 2) !== original[k]);
+  const dirty = Object.keys(CONFIG.FILES).some((k) => JSON.stringify(data[k], null, 2) !== original[CONFIG.FILES[k]]);
   const btn = $('#publish');
   btn.disabled = !dirty;
   $('#publish-status').textContent = dirty
