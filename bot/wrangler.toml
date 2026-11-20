@@ -1,0 +1,17 @@
+name = "vse-svoi-bot"
+main = "worker.js"
+compatibility_date = "2024-11-01"
+
+[vars]
+# Адрес сайта для CORS (через запятую можно несколько, но код берёт первый + localhost)
+ALLOWED_ORIGIN = "https://LeBWa219.github.io"
+
+# СЕКРЕТЫ задаются командами (не пишите их сюда!):
+#   npx wrangler secret put TELEGRAM_BOT_TOKEN
+#   npx wrangler secret put TELEGRAM_CHAT_ID
+#
+# Опционально — бэкап заявок и лимит запросов (раскомментировать после создания):
+#   npx wrangler kv namespace create LEADS_KV
+# [[kv_namespaces]]
+# binding = "LEADS_KV"
+# id = "<id из вывода команды выше>"

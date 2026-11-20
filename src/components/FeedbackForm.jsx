@@ -3,7 +3,10 @@ import { useAudience } from "../context/AudienceContext.jsx";
 import { Icon } from "./Icons.jsx";
 import { pub } from "../utils/pub.js";
 
-const initial = { name: "", phone: "", email: "", message: "" };
+// Адрес Cloudflare Worker (bot/README.md). Пусто — демо-режим без отправки.
+const LEAD_API_URL = (typeof import.meta !== "undefined" && import.meta.env?.VITE_LEAD_API_URL) || "";
+
+const initial = { name: "", phone: "", email: "", city: "", message: "", company: "" };
 
 export default function FeedbackForm({ onOpenLegal }) {
   const { audience } = useAudience();
@@ -11,6 +14,8 @@ export default function FeedbackForm({ onOpenLegal }) {
   const [errors, setErrors] = useState({});
   const [consent, setConsent] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [sending, setSending] = useState(false);
+  const [sendError, setSendError] = useState("");
 
   const validate = () => {
     const e = {};
@@ -28,14 +33,55 @@ export default function FeedbackForm({ onOpenLegal }) {
     return e;
   };
 
-  const onSubmit = (ev) => {
+  const onSubmit = async (ev) => {
     ev.preventDefault();
     const e = validate();
     setErrors(e);
+    setSendError("");
     if (Object.keys(e).length > 0) return;
-    setSubmitted(true);
-    setForm(initial);
-    setConsent(false);
+
+    // honeypot: заполнили только боты — показываем успех, ничего не отправляем
+    if (form.company) {
+      setSubmitted(true);
+      setForm(initial);
+      setConsent(false);
+      return;
+    }
+
+    // демо-режим: адрес Worker'а не настроен
+    if (!LEAD_API_URL) {
+      setSubmitted(true);
+      setForm(initial);
+      setConsent(false);
+      return;
+    }
+
+    setSending(true);
+    try {
+      const res = await fetch(LEAD_API_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ...form, audience }),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok || !data.ok) {
+        if (data.errors) setErrors(data.errors);
+        setSendError(
+          data.error ||
+            "Не удалось отправить заявку. Напишите нам в Telegram — @vse_svoi_job",
+        );
+        return;
+      }
+      setSubmitted(true);
+      setForm(initial);
+      setConsent(false);
+    } catch {
+      setSendError(
+        "Нет связи с сервером. Напишите нам в Telegram — @vse_svoi_job",
+      );
+    } finally {
+      setSending(false);
+    }
   };
 
   const update = (k) => (e) => {
@@ -190,6 +236,8 @@ export default function FeedbackForm({ onOpenLegal }) {
                       id="ff-city"
                       className="input"
                       placeholder="Москва, Казань, любой город России…"
+                      value={form.city}
+                      onChange={update("city")}
                       autoComplete="address-level2"
                     />
                   </Field>
@@ -257,10 +305,29 @@ export default function FeedbackForm({ onOpenLegal }) {
                   <button
                     type="submit"
                     className="btn-primary w-full sm:w-auto"
+                    disabled={sending}
                   >
-                    Отправить заявку
+                    {sending ? "Отправляем…" : "Отправить заявку"}
                     <Icon.arrow className="w-4 h-4" />
                   </button>
+
+                  {sendError && (
+                    <p className="text-sm text-brand-crimson font-semibold">
+                      {sendError}
+                    </p>
+                  )}
+
+                  {/* honeypot: невидимое поле для ботов */}
+                  <input
+                    type="text"
+                    name="company"
+                    value={form.company}
+                    onChange={update("company")}
+                    className="hidden"
+                    tabIndex={-1}
+                    autoComplete="off"
+                    aria-hidden="true"
+                  />
 
                   <p className="text-[11px] text-slate-400 leading-relaxed">
                     Нажимая «Отправить заявку», вы подтверждаете, что
