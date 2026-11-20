@@ -37,7 +37,7 @@ export default function Services() {
               >
                 <div className="p-5 pb-0">
                   <ImagePlaceholder
-                    src={pub(item.image)}
+                    src={item.image ? pub(item.image) : ""}
                     alt={item.title}
                     height="h-36"
                     label="Место для фото"

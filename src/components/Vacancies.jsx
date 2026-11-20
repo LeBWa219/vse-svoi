@@ -158,7 +158,7 @@ function VacancyCard({ vacancy, isFlipped, onToggle, animationDelay }) {
           {/* Место под изображение вакансии */}
           <div className="relative">
             <ImagePlaceholder
-              src={pub(vacancy.image)}
+              src={vacancy.image ? pub(vacancy.image) : ""}
               alt={vacancy.title}
               height="h-32"
               className="!rounded-none"
