@@ -1,6 +1,6 @@
 {
   "index.html": {
-    "file": "assets/app-BSo5uU04.js",
+    "file": "assets/app-Bc-qiD0b.js",
     "name": "app",
     "src": "index.html",
     "isEntry": true,
@@ -12,7 +12,7 @@
     ]
   },
   "node_modules/react-dom/client.js": {
-    "file": "assets/client-LHWErSyQ.js",
+    "file": "assets/client-DjVdGoCY.js",
     "name": "client",
     "src": "node_modules/react-dom/client.js",
     "isDynamicEntry": true,
