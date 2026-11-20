@@ -220,8 +220,20 @@ function renderVacancies() {
   box.innerHTML = data.vacancies.map((v, i) => `
     <details class="bg-slate-900/70 ring-1 ring-slate-800 rounded-2xl overflow-hidden" ${i === 0 ? 'open' : ''}>
       <summary class="px-5 py-3 cursor-pointer flex items-center justify-between gap-3 hover:bg-slate-800/50">
-        <span class="font-semibold text-sm truncate">${esc(v.title)}</span>
+        <span class="flex items-center gap-3 min-w-0">
+          <span class="font-semibold text-sm truncate">${esc(v.title)}</span>
+          <span class="text-[10px] px-2 py-0.5 rounded-full flex-shrink-0 ${
+            v.active === false
+              ? 'bg-slate-700 text-slate-400'
+              : 'bg-emerald-900/60 text-emerald-300'
+          }">${v.active === false ? 'Скрыта' : 'Активна'}</span>
+        </span>
         <span class="flex items-center gap-1 flex-shrink-0">
+          <label class="inline-flex items-center cursor-pointer gap-2 flex-shrink-0" title="Показывать на сайте">
+            <input type="checkbox" data-field-active data-i="${i}" class="sr-only peer" ${v.active === false ? '' : 'checked'}>
+            <span class="w-11 h-6 rounded-full bg-slate-700 peer-checked:bg-emerald-600 relative transition-colors after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:w-5 after:h-5 after:rounded-full after:bg-white after:transition-transform peer-checked:after:translate-x-5"></span>
+            <span class="text-xs text-slate-400">на сайте</span>
+          </label>
           <button class="${btnCls}" data-act="up" data-i="${i}" title="Выше">↑</button>
           <button class="${btnCls}" data-act="down" data-i="${i}" title="Ниже">↓</button>
           <button class="${btnCls}" data-act="dup" data-i="${i}" title="Дублировать">📄</button>
@@ -326,6 +338,13 @@ function bindEvents() {
     updatePublish();
   });
   $('#vacancy-list').addEventListener('change', (e) => {
+    // переключатель видимости: сразу перерисовываем бейдж статуса
+    if (e.target.dataset.fieldActive !== undefined) {
+      const i = Number(e.target.dataset.i);
+      data.vacancies[i].active = e.target.checked;
+      renderVacancies(); updatePublish();
+      return;
+    }
     if (e.target.dataset.fieldCities) {
       const i = Number(e.target.dataset.i);
       const list = data.vacancies[i].cities || (data.vacancies[i].cities = []);

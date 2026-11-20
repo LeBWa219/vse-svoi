@@ -19,10 +19,10 @@ export default function Vacancies() {
 
   const toggle = (id) => setFlipped((cur) => ({ ...cur, [id]: !cur[id] }));
 
-  const filtered =
-    city === "all"
-      ? vacancies
-      : vacancies.filter((v) => v.cities?.includes(city));
+  const filtered = (city === "all"
+    ? vacancies
+    : vacancies.filter((v) => v.cities?.includes(city))
+  ).filter((v) => v.active !== false);
   const visible = showAll ? filtered : filtered.slice(0, VISIBLE_COUNT);
   const hiddenCount = filtered.length - VISIBLE_COUNT;
 
