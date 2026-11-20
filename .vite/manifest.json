@@ -1,0 +1,23 @@
+{
+  "index.html": {
+    "file": "assets/app-BSo5uU04.js",
+    "name": "app",
+    "src": "index.html",
+    "isEntry": true,
+    "dynamicImports": [
+      "node_modules/react-dom/client.js"
+    ],
+    "css": [
+      "assets/app-BBpgLOcK.css"
+    ]
+  },
+  "node_modules/react-dom/client.js": {
+    "file": "assets/client-LHWErSyQ.js",
+    "name": "client",
+    "src": "node_modules/react-dom/client.js",
+    "isDynamicEntry": true,
+    "imports": [
+      "index.html"
+    ]
+  }
+}
