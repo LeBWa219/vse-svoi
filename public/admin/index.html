@@ -261,7 +261,19 @@ function renderVacancies() {
           <div><label class="${lblCls}">Требования</label><textarea rows="4" class="${inpCls}" data-field-list="requirements" data-i="${i}">${esc((v.details?.requirements || []).join('\n'))}</textarea></div>
           <div><label class="${lblCls}">Условия</label><textarea rows="4" class="${inpCls}" data-field-list="conditions" data-i="${i}">${esc((v.details?.conditions || []).join('\n'))}</textarea></div>
         </div>
-        <div><label class="${lblCls}">Фото (путь, необязательно)</label><input class="${inpCls}" data-field="image" data-i="${i}" value="${esc(v.image || '')}" placeholder="/images/vacancies/1.jpg"></div>
+        <div>
+          <label class="${lblCls}">Фото карточки</label>
+          <div class="flex items-center gap-3">
+            ${v.image
+              ? `<img src="/vse-svoi${v.image}?t=${imgVersion}" class="w-14 h-14 rounded-lg object-cover ring-1 ring-slate-700 flex-shrink-0">`
+              : '<div class="w-14 h-14 rounded-lg bg-slate-800 ring-1 ring-dashed ring-slate-600 flex items-center justify-center text-slate-500 text-xl flex-shrink-0">🖼</div>'}
+            <div class="grid gap-1.5">
+              <input type="file" accept="image/*" data-image-i="${i}" class="text-xs text-slate-400 file:mr-2 file:px-3 file:py-1.5 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-violet-700 file:text-white hover:file:bg-violet-600">
+              ${v.image ? `<button class="${btnCls}" data-act="imgdel" data-i="${i}">Убрать фото</button>` : ''}
+            </div>
+          </div>
+          <p class="text-[10px] text-slate-500 mt-1">Фото загрузится сразу коммитом; потом жмите «Опубликовать»</p>
+        </div>
       </div>
     </details>
   `).join('');
@@ -309,6 +321,11 @@ function bindEvents() {
     e.preventDefault();
     const i = Number(btn.dataset.i);
     const act = btn.dataset.act;
+    if (act === 'imgdel') {
+      data.vacancies[i].image = '';
+      renderVacancies(); updatePublish();
+      return;
+    }
     if (act === 'up' && i > 0) [data.vacancies[i - 1], data.vacancies[i]] = [data.vacancies[i], data.vacancies[i - 1]];
     if (act === 'down' && i < data.vacancies.length - 1) [data.vacancies[i + 1], data.vacancies[i]] = [data.vacancies[i], data.vacancies[i + 1]];
     if (act === 'dup') {
@@ -338,6 +355,11 @@ function bindEvents() {
     updatePublish();
   });
   $('#vacancy-list').addEventListener('change', (e) => {
+    // загрузка фото с карточки
+    if (e.target.dataset.imageI !== undefined) {
+      if (e.target.files[0]) uploadVacancyImage(Number(e.target.dataset.imageI), e.target.files[0]);
+      return;
+    }
     // переключатель видимости: сразу перерисовываем бейдж статуса
     if (e.target.dataset.fieldActive !== undefined) {
       const i = Number(e.target.dataset.i);
@@ -391,7 +413,75 @@ function addFaq() {
   renderFaq(); updatePublish();
 }
 
-// ---------- Публикация ----------
+let imgVersion = Date.now(); // бустер кэша превью после загрузки фото
+
+// ---------- Фото ----------
+async function fileToJpegBase64(file, maxSide = 1200) {
+  const img = await createImageBitmap(file);
+  const scale = Math.min(1, maxSide / Math.max(img.width, img.height));
+  const w = Math.max(1, Math.round(img.width * scale));
+  const h = Math.max(1, Math.round(img.height * scale));
+  const canvas = document.createElement('canvas');
+  canvas.width = w; canvas.height = h;
+  canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+  const blob = await new Promise((res) => canvas.toBlob(res, 'image/jpeg', 0.85));
+  const buf = new Uint8Array(await blob.arrayBuffer());
+  let binary = '';
+  for (let i = 0; i < buf.length; i += 0x8000) {
+    binary += String.fromCharCode(...buf.subarray(i, i + 0x8000));
+  }
+  return btoa(binary);
+}
+
+async function uploadVacancyImage(i, file) {
+  const v = data.vacancies[i];
+  const status = $('#publish-status');
+  if (!token) { toast('Сначала войдите с токеном', false); return; }
+  if (file.size > 20 * 1024 * 1024) { toast('Файл больше 20 МБ', false); return; }
+  btnStateDuring('Загружаем фото…');
+  try {
+    const base64 = await fileToJpegBase64(file, 1200);
+    const path = `public/images/vacancies/${v.id}.jpg`;
+    status.textContent = `Коммитим ${path}…`;
+    let sha = null;
+    const meta = await ghApi(`/repos/${CONFIG.OWNER}/${CONFIG.REPO}/contents/${path}?ref=${CONFIG.BRANCH}`);
+    if (meta.ok) sha = (await meta.json()).sha;
+    const res = await ghApi(`/repos/${CONFIG.OWNER}/${CONFIG.REPO}/contents/${path}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        message: `Фото для вакансии «${v.title}» через админку`,
+        content: base64,
+        ...(sha ? { sha } : {}),
+        branch: CONFIG.BRANCH,
+      }),
+    });
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(err.message || res.status);
+    }
+    const meta2 = await res.json();
+    shas[path] = meta2.content?.sha || null;
+    v.image = `/images/vacancies/${v.id}.jpg`;
+    imgVersion = Date.now();
+    renderVacancies(); updatePublish();
+    status.innerHTML = '✅ Фото загружено! Не забудьте нажать «Опубликовать», чтобы связать его с карточкой.';
+    toast('Фото загружено', true);
+  } catch (e) {
+    status.textContent = 'Ошибка загрузки фото: ' + e.message;
+    toast('Ошибка загрузки фото', false);
+  } finally {
+    btnStateDuring(null);
+  }
+}
+
+let publishLabel = 'Опубликовать';
+function btnStateDuring(text) {
+  const btn = $('#publish');
+  if (text) { publishLabel = btn.textContent; btn.textContent = text; btn.disabled = true; }
+  else { btn.textContent = publishLabel; updatePublish(); }
+}
+
 function updatePublish() {
   const dirty = Object.keys(CONFIG.FILES).some((k) => JSON.stringify(data[k], null, 2) !== original[CONFIG.FILES[k]]);
   const btn = $('#publish');
