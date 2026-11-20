@@ -1,4 +1,5 @@
 User-agent: *
 Allow: /
+Disallow: /vse-svoi/admin
 
 Sitemap: https://LeBWa219.github.io/vse-svoi/sitemap.xml

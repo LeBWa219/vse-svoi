@@ -1,0 +1,437 @@
+<!doctype html>
+<html lang="ru" class="dark">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="robots" content="noindex, nofollow" />
+<title>Админка — Все свои</title>
+<link rel="icon" type="image/jpeg" href="/vse-svoi/logo.jpg" />
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  body { background: #0b0718; }
+  input, textarea { color-scheme: dark; }
+</style>
+</head>
+<body class="min-h-screen text-slate-200">
+
+<!-- Экран входа -->
+<div id="login" class="min-h-screen flex items-center justify-center p-6">
+  <div class="w-full max-w-md bg-slate-900/80 ring-1 ring-purple-500/30 rounded-3xl p-8">
+    <div class="font-bold text-3xl bg-gradient-to-r from-violet-400 to-blue-400 bg-clip-text text-transparent">ВСЕ СВОИ</div>
+    <div class="text-xs uppercase tracking-widest text-violet-300/80 mt-1 mb-6">панель управления</div>
+    <label class="block text-sm text-slate-400 mb-1">GitHub-токен (fine-grained, доступ к репозиторию vse-svoi)</label>
+    <input id="token-input" type="password" autocomplete="off"
+      class="w-full bg-slate-800/80 border border-slate-700 rounded-xl px-4 py-3 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-violet-500"
+      placeholder="github_pat_..." />
+    <label class="flex items-center gap-2 mt-3 text-xs text-slate-500">
+      <input id="remember" type="checkbox" checked class="rounded bg-slate-800 border-slate-600" />
+      Запомнить в этом браузере
+    </label>
+    <button id="login-btn" class="mt-5 w-full rounded-xl py-3 text-sm font-semibold bg-gradient-to-r from-violet-700 to-blue-600 hover:from-violet-600 hover:to-blue-500 transition">
+      Войти
+    </button>
+    <p id="login-error" class="mt-3 text-sm text-rose-400 hidden"></p>
+    <p class="mt-5 text-[11px] text-slate-500 leading-relaxed">
+      Токен хранится только в этом браузере (localStorage) и передаётся напрямую в GitHub API.
+      Рекомендуется fine-grained token с правом «Contents: read and write» только на репозиторий vse-svoi.
+      Ссылка на сайт: <a href="/vse-svoi/" class="text-violet-400 underline" target="_blank">открыть</a>
+    </p>
+  </div>
+</div>
+
+<!-- Рабочая область -->
+<div id="app" class="hidden max-w-5xl mx-auto p-6">
+  <header class="flex items-center justify-between gap-4 py-4 border-b border-slate-800">
+    <div>
+      <div class="font-bold text-2xl bg-gradient-to-r from-violet-400 to-blue-400 bg-clip-text text-transparent">ВСЕ СВОИ · админка</div>
+      <div id="whoami" class="text-xs text-slate-500 mt-0.5"></div>
+    </div>
+    <div class="flex items-center gap-2">
+      <a href="/vse-svoi/" target="_blank" class="text-xs px-3 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300">Сайт ↗</a>
+      <a href="https://github.com/LeBWa219/vse-svoi/actions" target="_blank" class="text-xs px-3 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300">Деплой ↗</a>
+      <button id="logout" class="text-xs px-3 py-2 rounded-lg bg-rose-900/50 hover:bg-rose-800/60 text-rose-300">Выйти</button>
+    </div>
+  </header>
+
+  <div class="flex gap-2 mt-5">
+    <button data-tab="vacancies" class="tab-btn px-4 py-2 rounded-xl text-sm font-semibold">Вакансии</button>
+    <button data-tab="faq" class="tab-btn px-4 py-2 rounded-xl text-sm font-semibold">FAQ</button>
+  </div>
+
+  <!-- Вакансии -->
+  <section id="tab-vacancies" class="mt-5 hidden">
+    <div class="flex items-center justify-between">
+      <h2 class="text-lg font-semibold">Открытые позиции</h2>
+      <button id="add-vacancy" class="px-4 py-2 rounded-xl text-sm font-semibold bg-gradient-to-r from-violet-700 to-blue-600 hover:from-violet-600 hover:to-blue-500">+ Добавить вакансию</button>
+    </div>
+    <div id="vacancy-list" class="mt-4 space-y-4"></div>
+  </section>
+
+  <!-- FAQ -->
+  <section id="tab-faq" class="mt-5 hidden">
+    <div class="flex gap-2">
+      <button data-faq-tab="client" class="faq-tab-btn px-4 py-2 rounded-xl text-sm font-semibold">Заказчикам</button>
+      <button data-faq-tab="performer" class="faq-tab-btn px-4 py-2 rounded-xl text-sm font-semibold">Исполнителям</button>
+    </div>
+    <div id="faq-list" class="mt-4 space-y-4"></div>
+    <button id="add-faq" class="mt-4 px-4 py-2 rounded-xl text-sm font-semibold bg-gradient-to-r from-violet-700 to-blue-600 hover:from-violet-600 hover:to-blue-500">+ Добавить вопрос</button>
+  </section>
+
+  <!-- Публикация -->
+  <div class="sticky bottom-4 mt-8">
+    <div class="bg-slate-900/90 backdrop-blur ring-1 ring-slate-700 rounded-2xl p-4 flex items-center justify-between gap-4">
+      <div id="publish-status" class="text-sm text-slate-400">Данные не изменены</div>
+      <button id="publish" disabled
+        class="px-6 py-3 rounded-xl text-sm font-semibold bg-gradient-to-r from-violet-700 to-blue-600 disabled:opacity-40 disabled:cursor-not-allowed">
+        Опубликовать
+      </button>
+    </div>
+  </div>
+</div>
+
+<div id="toast" class="fixed top-4 right-4 z-50 hidden px-5 py-3 rounded-xl text-sm font-semibold shadow-xl"></div>
+
+<script>
+const CONFIG = {
+  OWNER: 'LeBWa219',
+  REPO: 'vse-svoi',
+  BRANCH: 'main',
+  FILES: {
+    vacancies: 'src/data/vacancies.json',
+    faq: 'src/data/faq.json',
+  },
+};
+
+const TOKEN_KEY = 'vs_admin_pat';
+let token = null;
+let user = null;
+let data = { vacancies: [], faq: { client: { title: '', items: [] }, performer: { title: '', items: [] } } };
+let shas = {};
+let original = {};
+let faqTab = 'client';
+let activeTab = 'vacancies';
+
+const $ = (s) => document.querySelector(s);
+const $$ = (s) => Array.from(document.querySelectorAll(s));
+
+function toast(msg, ok = true) {
+  const t = $('#toast');
+  t.textContent = msg;
+  t.className = t.className.replace(/ (bg-emerald-600|bg-rose-600)/g, '') + (ok ? ' bg-emerald-600' : ' bg-rose-600');
+  t.classList.remove('hidden');
+  setTimeout(() => t.classList.add('hidden'), 4000);
+}
+
+function b64utf8(text) {
+  return btoa(String.fromCharCode(...new TextEncoder().encode(text)));
+}
+
+async function ghApi(path, options = {}) {
+  const headers = {
+    Accept: 'application/vnd.github+json',
+    ...(options.headers || {}),
+  };
+  if (token) headers.Authorization = `Bearer ${token}`;
+  const res = await fetch(`https://api.github.com${path}`, { ...options, headers });
+  return res;
+}
+
+// ---------- Вход ----------
+async function tryLogin() {
+  const input = $('#token-input');
+  const err = $('#login-error');
+  token = input.value.trim();
+  err.classList.add('hidden');
+  if (!token) { err.textContent = 'Введите токен'; err.classList.remove('hidden'); return; }
+  const btn = $('#login-btn');
+  btn.textContent = 'Проверяем…'; btn.disabled = true;
+  try {
+    const res = await ghApi('/user');
+    if (res.status === 401) throw new Error('Токен недействителен');
+    if (res.status === 403) throw new Error('У токена нет доступа к API — проверьте права');
+    const me = await res.json();
+    user = me.login;
+    if ($('#remember').checked) localStorage.setItem(TOKEN_KEY, token);
+    startApp();
+  } catch (e) {
+    err.textContent = e.message || 'Ошибка проверки токена';
+    err.classList.remove('hidden');
+  } finally {
+    btn.textContent = 'Войти'; btn.disabled = false;
+  }
+}
+
+function startApp() {
+  $('#login').classList.add('hidden');
+  $('#app').classList.remove('hidden');
+  $('#whoami').textContent = `Вы вошли как ${user} · репозиторий ${CONFIG.OWNER}/${CONFIG.REPO}`;
+  loadData();
+}
+
+// ---------- Загрузка данных ----------
+async function loadData() {
+  const status = $('#publish-status');
+  status.textContent = 'Загружаем данные…';
+  try {
+    for (const [key, path] of Object.entries(CONFIG.FILES)) {
+      const [rawRes, metaRes] = await Promise.all([
+        fetch(`https://raw.githubusercontent.com/${CONFIG.OWNER}/${CONFIG.REPO}/${CONFIG.BRANCH}/${path}?t=${Date.now()}`),
+        ghApi(`/repos/${CONFIG.OWNER}/${CONFIG.REPO}/contents/${path}?ref=${CONFIG.BRANCH}`),
+      ]);
+      if (!rawRes.ok) throw new Error(`Не удалось загрузить ${path} (${rawRes.status})`);
+      data[key] = await rawRes.json();
+      const meta = metaRes.ok ? await metaRes.json() : null;
+      shas[path] = meta ? meta.sha : null;
+      original[path] = JSON.stringify(data[key], null, 2);
+    }
+    renderAll();
+    status.textContent = 'Данные загружены. Правьте и жмите «Опубликовать».';
+    updatePublish();
+  } catch (e) {
+    status.textContent = 'Ошибка загрузки: ' + e.message;
+  }
+}
+
+// ---------- Рендер ----------
+function renderAll() {
+  renderVacancies();
+  renderFaq();
+  markTab();
+}
+
+function markTab() {
+  $$('.tab-btn').forEach((b) => {
+    const on = b.dataset.tab === activeTab;
+    b.className = 'tab-btn px-4 py-2 rounded-xl text-sm font-semibold ' +
+      (on ? 'bg-gradient-to-r from-violet-700 to-blue-600 text-white shadow-md' : 'bg-slate-800/70 text-slate-400 hover:text-slate-200');
+  });
+  $('#tab-vacancies').classList.toggle('hidden', activeTab !== 'vacancies');
+  $('#tab-faq').classList.toggle('hidden', activeTab !== 'faq');
+}
+
+function esc(s) { return String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
+
+const inpCls = 'w-full bg-slate-800/80 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-100 focus:outline-none focus:ring-2 focus:ring-violet-500';
+const lblCls = 'block text-[11px] uppercase tracking-wide text-slate-500 mb-1';
+const btnCls = 'px-2 py-1 rounded-lg text-xs bg-slate-800 hover:bg-slate-700 text-slate-300';
+
+function renderVacancies() {
+  const box = $('#vacancy-list');
+  box.innerHTML = data.vacancies.map((v, i) => `
+    <details class="bg-slate-900/70 ring-1 ring-slate-800 rounded-2xl overflow-hidden" ${i === 0 ? 'open' : ''}>
+      <summary class="px-5 py-3 cursor-pointer flex items-center justify-between gap-3 hover:bg-slate-800/50">
+        <span class="font-semibold text-sm truncate">${esc(v.title)}</span>
+        <span class="flex items-center gap-1 flex-shrink-0">
+          <button class="${btnCls}" data-act="up" data-i="${i}" title="Выше">↑</button>
+          <button class="${btnCls}" data-act="down" data-i="${i}" title="Ниже">↓</button>
+          <button class="${btnCls}" data-act="dup" data-i="${i}" title="Дублировать">📄</button>
+          <button class="${btnCls}" data-act="del" data-i="${i}" title="Удалить">🗑</button>
+        </span>
+      </summary>
+      <div class="px-5 pb-5 pt-1 grid gap-3">
+        <div class="grid sm:grid-cols-2 gap-3">
+          <div><label class="${lblCls}">Название</label><input class="${inpCls}" data-field="title" data-i="${i}" value="${esc(v.title)}"></div>
+          <div><label class="${lblCls}">Партнёр</label><input class="${inpCls}" data-field="partner" data-i="${i}" value="${esc(v.partner)}"></div>
+          <div><label class="${lblCls}">Город (текст на карточке)</label><input class="${inpCls}" data-field="city" data-i="${i}" value="${esc(v.city)}"></div>
+          <div><label class="${lblCls}">Зарплата (как на Авито)</label><input class="${inpCls}" data-field="salary" data-i="${i}" value="${esc(v.salary)}"></div>
+          <div><label class="${lblCls}">График</label><input class="${inpCls}" data-field="schedule" data-i="${i}" value="${esc(v.schedule)}"></div>
+          <div>
+            <label class="${lblCls}">Регионы для фильтра</label>
+            <div class="flex gap-4 pt-1.5">
+              <label class="flex items-center gap-2 text-sm"><input type="checkbox" class="rounded bg-slate-800" data-field-cities="msk" data-i="${i}" ${v.cities?.includes('msk') ? 'checked' : ''}> Москва и МО</label>
+              <label class="flex items-center gap-2 text-sm"><input type="checkbox" class="rounded bg-slate-800" data-field-cities="spb" data-i="${i}" ${v.cities?.includes('spb') ? 'checked' : ''}> Санкт-Петербург</label>
+            </div>
+          </div>
+        </div>
+        <div><label class="${lblCls}">Краткое описание</label><textarea rows="2" class="${inpCls}" data-field="short" data-i="${i}">${esc(v.short)}</textarea></div>
+        <div class="grid sm:grid-cols-3 gap-3">
+          <div><label class="${lblCls}">Обязанности (строка = пункт)</label><textarea rows="4" class="${inpCls}" data-field-list="obligations" data-i="${i}">${esc((v.details?.obligations || []).join('\n'))}</textarea></div>
+          <div><label class="${lblCls}">Требования</label><textarea rows="4" class="${inpCls}" data-field-list="requirements" data-i="${i}">${esc((v.details?.requirements || []).join('\n'))}</textarea></div>
+          <div><label class="${lblCls}">Условия</label><textarea rows="4" class="${inpCls}" data-field-list="conditions" data-i="${i}">${esc((v.details?.conditions || []).join('\n'))}</textarea></div>
+        </div>
+        <div><label class="${lblCls}">Фото (путь, необязательно)</label><input class="${inpCls}" data-field="image" data-i="${i}" value="${esc(v.image || '')}" placeholder="/images/vacancies/1.jpg"></div>
+      </div>
+    </details>
+  `).join('');
+}
+
+function renderFaq() {
+  const box = $('#faq-list');
+  const items = data.faq[faqTab].items;
+  box.innerHTML = items.map((item, i) => `
+    <div class="bg-slate-900/70 ring-1 ring-slate-800 rounded-2xl p-4 grid gap-2">
+      <div class="flex items-center gap-2">
+        <input class="${inpCls} font-semibold" data-faq-field="q" data-i="${i}" value="${esc(item.q)}" placeholder="Вопрос">
+        <span class="flex items-center gap-1 flex-shrink-0">
+          <button class="${btnCls}" data-faq-act="up" data-i="${i}">↑</button>
+          <button class="${btnCls}" data-faq-act="down" data-i="${i}">↓</button>
+          <button class="${btnCls}" data-faq-act="del" data-i="${i}">🗑</button>
+        </span>
+      </div>
+      <textarea rows="4" class="${inpCls}" data-faq-field="a" data-i="${i}" placeholder="Ответ">${esc(item.a)}</textarea>
+    </div>
+  `).join('');
+  $('#add-faq').classList.toggle('hidden', false);
+  $$('.faq-tab-btn').forEach((b) => {
+    const on = b.dataset.faqTab === faqTab;
+    b.className = 'faq-tab-btn px-4 py-2 rounded-xl text-sm font-semibold ' +
+      (on ? 'bg-gradient-to-r from-violet-700 to-blue-600 text-white shadow-md' : 'bg-slate-800/70 text-slate-400 hover:text-slate-200');
+  });
+}
+
+// ---------- Редактирование ----------
+function bindEvents() {
+  $$('.tab-btn').forEach((b) => b.addEventListener('click', () => { activeTab = b.dataset.tab; markTab(); }));
+  $$('.faq-tab-btn').forEach((b) => b.addEventListener('click', () => { faqTab = b.dataset.faqTab; renderFaq(); }));
+  $('#add-vacancy').addEventListener('click', addVacancy);
+  $('#add-faq').addEventListener('click', addFaq);
+  $('#publish').addEventListener('click', publish);
+  $('#logout').addEventListener('click', () => { localStorage.removeItem(TOKEN_KEY); location.reload(); });
+  $('#login-btn').addEventListener('click', tryLogin);
+  $('#token-input').addEventListener('keydown', (e) => { if (e.key === 'Enter') tryLogin(); });
+
+  // вакансии: делегирование
+  $('#vacancy-list').addEventListener('click', (e) => {
+    const btn = e.target.closest('button[data-act]');
+    if (!btn) return;
+    e.preventDefault();
+    const i = Number(btn.dataset.i);
+    const act = btn.dataset.act;
+    if (act === 'up' && i > 0) [data.vacancies[i - 1], data.vacancies[i]] = [data.vacancies[i], data.vacancies[i - 1]];
+    if (act === 'down' && i < data.vacancies.length - 1) [data.vacancies[i + 1], data.vacancies[i]] = [data.vacancies[i], data.vacancies[i + 1]];
+    if (act === 'dup') {
+      const copy = JSON.parse(JSON.stringify(data.vacancies[i]));
+      copy.id = Math.max(...data.vacancies.map((v) => v.id)) + 1;
+      data.vacancies.splice(i + 1, 0, copy);
+    }
+    if (act === 'del') {
+      if (!confirm(`Удалить вакансию «${data.vacancies[i].title}»?`)) return;
+      data.vacancies.splice(i, 1);
+    }
+    renderVacancies(); updatePublish();
+  });
+  $('#vacancy-list').addEventListener('input', (e) => {
+    const t = e.target;
+    const i = Number(t.dataset.i);
+    if (t.dataset.field) data.vacancies[i][t.dataset.field] = t.value;
+    if (t.dataset.fieldList) {
+      data.vacancies[i].details[t.dataset.fieldList] =
+        t.value.split('\n').map((s) => s.trim()).filter(Boolean);
+    }
+    if (t.dataset.fieldCities) {
+      const list = data.vacancies[i].cities || (data.vacancies[i].cities = []);
+      if (t.checked && !list.includes(t.dataset.fieldCities)) list.push(t.dataset.fieldCities);
+      if (!t.checked) data.vacancies[i].cities = list.filter((c) => c !== t.dataset.fieldCities);
+    }
+    updatePublish();
+  });
+  $('#vacancy-list').addEventListener('change', (e) => {
+    if (e.target.dataset.fieldCities) {
+      const i = Number(e.target.dataset.i);
+      const list = data.vacancies[i].cities || (data.vacancies[i].cities = []);
+      if (e.target.checked && !list.includes(e.target.dataset.fieldCities)) list.push(e.target.dataset.fieldCities);
+      if (!e.target.checked) data.vacancies[i].cities = list.filter((c) => c !== e.target.dataset.fieldCities);
+      updatePublish();
+    }
+  });
+
+  // FAQ
+  $('#faq-list').addEventListener('input', (e) => {
+    const t = e.target;
+    const i = Number(t.dataset.i);
+    if (t.dataset.faqField) data.faq[faqTab].items[i][t.dataset.faqField] = t.value;
+    updatePublish();
+  });
+  $('#faq-list').addEventListener('click', (e) => {
+    const btn = e.target.closest('button[data-faq-act]');
+    if (!btn) return;
+    const i = Number(btn.dataset.i);
+    const items = data.faq[faqTab].items;
+    if (btn.dataset.faqAct === 'up' && i > 0) [items[i - 1], items[i]] = [items[i], items[i - 1]];
+    if (btn.dataset.faqAct === 'down' && i < items.length - 1) [items[i + 1], items[i]] = [items[i], items[i + 1]];
+    if (btn.dataset.faqAct === 'del') { if (confirm('Удалить вопрос?')) items.splice(i, 1); }
+    renderFaq(); updatePublish();
+  });
+}
+
+function addVacancy() {
+  const id = Math.max(0, ...data.vacancies.map((v) => v.id)) + 1;
+  data.vacancies.push({
+    id, title: 'Новая вакансия', partner: 'Бери Заряд',
+    city: 'Москва и МО, СПб', cities: ['msk', 'spb'],
+    salary: '', schedule: 'Смены 12 ч: 9:00–21:00 / 21:00–9:00',
+    short: '', image: '',
+    details: { obligations: [], requirements: [], conditions: [] },
+  });
+  renderVacancies(); updatePublish();
+  $('#vacancy-list details:last-of-type')?.setAttribute('open', '');
+}
+
+function addFaq() {
+  data.faq[faqTab].items.push({ q: 'Новый вопрос?', a: 'Ответ' });
+  renderFaq(); updatePublish();
+}
+
+// ---------- Публикация ----------
+function updatePublish() {
+  const dirty = CONFIG.FILES && Object.keys(CONFIG.FILES).some((k) => JSON.stringify(data[k], null, 2) !== original[k]);
+  const btn = $('#publish');
+  btn.disabled = !dirty;
+  $('#publish-status').textContent = dirty
+    ? 'Есть несохранённые изменения — после публикации сайт обновится сам (1–2 мин)'
+    : 'Данные не изменены';
+  btn.classList.toggle('opacity-40', !dirty);
+}
+
+async function publish() {
+  const btn = $('#publish');
+  const status = $('#publish-status');
+  btn.disabled = true;
+  const files = [];
+  for (const key of Object.keys(CONFIG.FILES)) {
+    const path = CONFIG.FILES[key];
+    const text = JSON.stringify(data[key], null, 2);
+    if (text !== original[path]) files.push({ path, text });
+  }
+  if (files.length === 0) { updatePublish(); return; }
+  try {
+    for (const file of files) {
+      status.textContent = `Коммитим ${file.path}…`;
+      const res = await ghApi(`/repos/${CONFIG.OWNER}/${CONFIG.REPO}/contents/${file.path}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          message: `Обновление ${file.path.split('/').pop()} через админку`,
+          content: b64utf8(file.text),
+          sha: shas[file.path],
+          branch: CONFIG.BRANCH,
+        }),
+      });
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        throw new Error(`${file.path}: ${err.message || res.status}`);
+      }
+      const meta = await res.json();
+      shas[file.path] = meta.content?.sha || shas[file.path];
+      original[file.path] = file.text;
+    }
+    status.innerHTML = '✅ Опубликовано! Сайт пересоберётся автоматически за 1–2 минуты. <a class="text-violet-400 underline" href="https://github.com/LeBWa219/vse-svoi/actions" target="_blank">Статус сборки ↗</a>';
+    toast('Опубликовано!', true);
+    renderAll(); updatePublish();
+  } catch (e) {
+    status.textContent = 'Ошибка публикации: ' + e.message;
+    toast('Ошибка публикации', false);
+    btn.disabled = false;
+  }
+}
+
+// ---------- Старт ----------
+window.addEventListener('DOMContentLoaded', () => {
+  bindEvents();
+  markTab();
+  const saved = localStorage.getItem(TOKEN_KEY);
+  if (saved) { token = saved; startApp(); }
+});
+</script>
+</body>
+</html>
